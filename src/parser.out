@@ -1,0 +1,367 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> content
+Rule 1     content -> dayinfo
+Rule 2     content -> defaultproject
+Rule 3     dayinfo -> DAY EOL projectsdata
+Rule 4     projectsdata -> projectsdata changeprojectinfo projectdata
+Rule 5     changeprojectinfo -> PROJECT PROJECTNAME EOL
+Rule 6     projectsdata -> projectdata
+Rule 7     projectdata -> intervals activities
+Rule 8     defaultproject -> DEFAULTPROJECT PROJECTNAME EOL
+Rule 9     intervals -> intervals interval
+Rule 10    intervals -> interval
+Rule 11    interval -> TIME TIME EOL
+Rule 12    activities -> activity
+Rule 13    activities -> activities activity
+Rule 14    activity -> taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL
+Rule 15    taskidentifier -> NUMBERSIGN NUMBER
+Rule 16    taskidentifier -> NA
+
+Terminals, with rules where they appear
+
+ACTIVITY             : 14
+DAY                  : 3
+DEFAULTPROJECT       : 8
+EOL                  : 3 5 8 11 14
+LPARENTHESIS         : 14
+NA                   : 16
+NUMBER               : 15
+NUMBERSIGN           : 15
+PROJECT              : 5
+PROJECTNAME          : 5 8
+RPARENTHESIS         : 14
+SEPARATOR            : 14
+TIME                 : 11 11
+TITLE                : 14
+error                : 
+
+Nonterminals, with rules where they appear
+
+activities           : 7 13
+activity             : 12 13
+changeprojectinfo    : 4
+content              : 0
+dayinfo              : 1
+defaultproject       : 2
+interval             : 9 10
+intervals            : 7 9
+projectdata          : 4 6
+projectsdata         : 3 4
+taskidentifier       : 14
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . content
+    (1) content -> . dayinfo
+    (2) content -> . defaultproject
+    (3) dayinfo -> . DAY EOL projectsdata
+    (8) defaultproject -> . DEFAULTPROJECT PROJECTNAME EOL
+
+    DAY             shift and go to state 5
+    DEFAULTPROJECT  shift and go to state 2
+
+    content                        shift and go to state 4
+    dayinfo                        shift and go to state 1
+    defaultproject                 shift and go to state 3
+
+state 1
+
+    (1) content -> dayinfo .
+
+    $end            reduce using rule 1 (content -> dayinfo .)
+
+
+state 2
+
+    (8) defaultproject -> DEFAULTPROJECT . PROJECTNAME EOL
+
+    PROJECTNAME     shift and go to state 6
+
+
+state 3
+
+    (2) content -> defaultproject .
+
+    $end            reduce using rule 2 (content -> defaultproject .)
+
+
+state 4
+
+    (0) S' -> content .
+
+
+
+state 5
+
+    (3) dayinfo -> DAY . EOL projectsdata
+
+    EOL             shift and go to state 7
+
+
+state 6
+
+    (8) defaultproject -> DEFAULTPROJECT PROJECTNAME . EOL
+
+    EOL             shift and go to state 8
+
+
+state 7
+
+    (3) dayinfo -> DAY EOL . projectsdata
+    (4) projectsdata -> . projectsdata changeprojectinfo projectdata
+    (6) projectsdata -> . projectdata
+    (7) projectdata -> . intervals activities
+    (9) intervals -> . intervals interval
+    (10) intervals -> . interval
+    (11) interval -> . TIME TIME EOL
+
+    TIME            shift and go to state 12
+
+    projectsdata                   shift and go to state 9
+    interval                       shift and go to state 10
+    intervals                      shift and go to state 11
+    projectdata                    shift and go to state 13
+
+state 8
+
+    (8) defaultproject -> DEFAULTPROJECT PROJECTNAME EOL .
+
+    $end            reduce using rule 8 (defaultproject -> DEFAULTPROJECT PROJECTNAME EOL .)
+
+
+state 9
+
+    (3) dayinfo -> DAY EOL projectsdata .
+    (4) projectsdata -> projectsdata . changeprojectinfo projectdata
+    (5) changeprojectinfo -> . PROJECT PROJECTNAME EOL
+
+    $end            reduce using rule 3 (dayinfo -> DAY EOL projectsdata .)
+    PROJECT         shift and go to state 15
+
+    changeprojectinfo              shift and go to state 14
+
+state 10
+
+    (10) intervals -> interval .
+
+    TIME            reduce using rule 10 (intervals -> interval .)
+    NUMBERSIGN      reduce using rule 10 (intervals -> interval .)
+    NA              reduce using rule 10 (intervals -> interval .)
+
+
+state 11
+
+    (7) projectdata -> intervals . activities
+    (9) intervals -> intervals . interval
+    (12) activities -> . activity
+    (13) activities -> . activities activity
+    (11) interval -> . TIME TIME EOL
+    (14) activity -> . taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL
+    (15) taskidentifier -> . NUMBERSIGN NUMBER
+    (16) taskidentifier -> . NA
+
+    TIME            shift and go to state 12
+    NUMBERSIGN      shift and go to state 19
+    NA              shift and go to state 18
+
+    activities                     shift and go to state 16
+    taskidentifier                 shift and go to state 21
+    activity                       shift and go to state 20
+    interval                       shift and go to state 17
+
+state 12
+
+    (11) interval -> TIME . TIME EOL
+
+    TIME            shift and go to state 22
+
+
+state 13
+
+    (6) projectsdata -> projectdata .
+
+    PROJECT         reduce using rule 6 (projectsdata -> projectdata .)
+    $end            reduce using rule 6 (projectsdata -> projectdata .)
+
+
+state 14
+
+    (4) projectsdata -> projectsdata changeprojectinfo . projectdata
+    (7) projectdata -> . intervals activities
+    (9) intervals -> . intervals interval
+    (10) intervals -> . interval
+    (11) interval -> . TIME TIME EOL
+
+    TIME            shift and go to state 12
+
+    interval                       shift and go to state 10
+    intervals                      shift and go to state 11
+    projectdata                    shift and go to state 23
+
+state 15
+
+    (5) changeprojectinfo -> PROJECT . PROJECTNAME EOL
+
+    PROJECTNAME     shift and go to state 24
+
+
+state 16
+
+    (7) projectdata -> intervals activities .
+    (13) activities -> activities . activity
+    (14) activity -> . taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL
+    (15) taskidentifier -> . NUMBERSIGN NUMBER
+    (16) taskidentifier -> . NA
+
+    PROJECT         reduce using rule 7 (projectdata -> intervals activities .)
+    $end            reduce using rule 7 (projectdata -> intervals activities .)
+    NUMBERSIGN      shift and go to state 19
+    NA              shift and go to state 18
+
+    taskidentifier                 shift and go to state 21
+    activity                       shift and go to state 25
+
+state 17
+
+    (9) intervals -> intervals interval .
+
+    TIME            reduce using rule 9 (intervals -> intervals interval .)
+    NUMBERSIGN      reduce using rule 9 (intervals -> intervals interval .)
+    NA              reduce using rule 9 (intervals -> intervals interval .)
+
+
+state 18
+
+    (16) taskidentifier -> NA .
+
+    LPARENTHESIS    reduce using rule 16 (taskidentifier -> NA .)
+
+
+state 19
+
+    (15) taskidentifier -> NUMBERSIGN . NUMBER
+
+    NUMBER          shift and go to state 26
+
+
+state 20
+
+    (12) activities -> activity .
+
+    NUMBERSIGN      reduce using rule 12 (activities -> activity .)
+    NA              reduce using rule 12 (activities -> activity .)
+    PROJECT         reduce using rule 12 (activities -> activity .)
+    $end            reduce using rule 12 (activities -> activity .)
+
+
+state 21
+
+    (14) activity -> taskidentifier . LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL
+
+    LPARENTHESIS    shift and go to state 27
+
+
+state 22
+
+    (11) interval -> TIME TIME . EOL
+
+    EOL             shift and go to state 28
+
+
+state 23
+
+    (4) projectsdata -> projectsdata changeprojectinfo projectdata .
+
+    PROJECT         reduce using rule 4 (projectsdata -> projectsdata changeprojectinfo projectdata .)
+    $end            reduce using rule 4 (projectsdata -> projectsdata changeprojectinfo projectdata .)
+
+
+state 24
+
+    (5) changeprojectinfo -> PROJECT PROJECTNAME . EOL
+
+    EOL             shift and go to state 29
+
+
+state 25
+
+    (13) activities -> activities activity .
+
+    NUMBERSIGN      reduce using rule 13 (activities -> activities activity .)
+    NA              reduce using rule 13 (activities -> activities activity .)
+    PROJECT         reduce using rule 13 (activities -> activities activity .)
+    $end            reduce using rule 13 (activities -> activities activity .)
+
+
+state 26
+
+    (15) taskidentifier -> NUMBERSIGN NUMBER .
+
+    LPARENTHESIS    reduce using rule 15 (taskidentifier -> NUMBERSIGN NUMBER .)
+
+
+state 27
+
+    (14) activity -> taskidentifier LPARENTHESIS . TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL
+
+    TITLE           shift and go to state 30
+
+
+state 28
+
+    (11) interval -> TIME TIME EOL .
+
+    TIME            reduce using rule 11 (interval -> TIME TIME EOL .)
+    NUMBERSIGN      reduce using rule 11 (interval -> TIME TIME EOL .)
+    NA              reduce using rule 11 (interval -> TIME TIME EOL .)
+
+
+state 29
+
+    (5) changeprojectinfo -> PROJECT PROJECTNAME EOL .
+
+    TIME            reduce using rule 5 (changeprojectinfo -> PROJECT PROJECTNAME EOL .)
+
+
+state 30
+
+    (14) activity -> taskidentifier LPARENTHESIS TITLE . RPARENTHESIS SEPARATOR ACTIVITY EOL
+
+    RPARENTHESIS    shift and go to state 31
+
+
+state 31
+
+    (14) activity -> taskidentifier LPARENTHESIS TITLE RPARENTHESIS . SEPARATOR ACTIVITY EOL
+
+    SEPARATOR       shift and go to state 32
+
+
+state 32
+
+    (14) activity -> taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR . ACTIVITY EOL
+
+    ACTIVITY        shift and go to state 33
+
+
+state 33
+
+    (14) activity -> taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY . EOL
+
+    EOL             shift and go to state 34
+
+
+state 34
+
+    (14) activity -> taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL .
+
+    NUMBERSIGN      reduce using rule 14 (activity -> taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL .)
+    NA              reduce using rule 14 (activity -> taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL .)
+    PROJECT         reduce using rule 14 (activity -> taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL .)
+    $end            reduce using rule 14 (activity -> taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL .)
+
