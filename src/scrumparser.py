@@ -1,3 +1,5 @@
+import datetime
+
 import ply.lex as lex
 import ply.yacc as yacc
 
@@ -228,4 +230,5 @@ class ScrumParser(object):
                 current_lines = []
                 result = self.parser.parse(item_str)
                 if result:
-                    yield result
+                    day = datetime.datetime.strptime(result[0]['day'], '%d/%m/%Y').date()
+                    yield day, result

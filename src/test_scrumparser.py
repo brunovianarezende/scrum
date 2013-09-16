@@ -1,6 +1,7 @@
 import unittest
+import datetime
 
-from parser import ScrumLexer, PlyScrumParser, ScrumParser
+from scrumparser import ScrumLexer, PlyScrumParser, ScrumParser
 
 class TestScrumLexer(unittest.TestCase):
     def test_tokenizer(self):
@@ -256,7 +257,7 @@ DefaultProject: other project
 """
         parser = ScrumParser('')
         items = parser.parse(parser_input.split('\n'))
-        expected = [
+        expected = (datetime.date(2013, 7, 26), [
             {
              'activities': [
                 {
@@ -301,10 +302,10 @@ DefaultProject: other project
             'work_time': 51,
             'project': 'New Project Name',
             },
-        ]
+        ])
         self.assertEqual(items.next(), expected)
 
-        expected = [
+        expected = (datetime.date(2013, 7, 25), [
             {
              'activities': [
                 {
@@ -317,10 +318,10 @@ DefaultProject: other project
             'work_time': 243,
             'project': 'Project',
             },
-        ]
+        ])
         self.assertEqual(items.next(), expected)
 
-        expected = [
+        expected = (datetime.date(2013, 7, 24), [
             {
              'activities': [
                 {
@@ -333,7 +334,7 @@ DefaultProject: other project
             'work_time': 243,
             'project': 'other project',
             },
-        ]
+        ])
         self.assertEqual(items.next(), expected)
 
         self.assertRaises(StopIteration, items.next)
