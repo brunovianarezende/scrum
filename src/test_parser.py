@@ -1,6 +1,6 @@
 import unittest
 
-from scrum2 import ScrumLexer, PlyScrumParser, ScrumParser
+from parser import ScrumLexer, PlyScrumParser, ScrumParser
 
 class TestScrumLexer(unittest.TestCase):
     def test_tokenizer(self):
