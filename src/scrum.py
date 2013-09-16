@@ -28,8 +28,6 @@ def print_for_spread_sheet(projects_work):
         print '\t'.join((day, project, ids, titles, worked_time, descriptions))
 
 def print_for_scrum(today, scrum_data):
-    print '[today]'
-    print '\n'
     for scrum_day, projects_work in scrum_data:
         if scrum_day.weekday() in (5, 6):
             scrum_day = DAYS[scrum_day.weekday()]
@@ -44,6 +42,8 @@ def print_for_scrum(today, scrum_data):
                 if ticket.isdigit():
                     ticket = '#' + ticket
                 print '%s (%s) - %s' % (ticket, a['title'], a['description'])
+    print '\n'
+    print '[today]'
     
 
 from pprint import pprint

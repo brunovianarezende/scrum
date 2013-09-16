@@ -146,9 +146,14 @@ class PlyScrumParser(object):
         'projectsdata : projectdata'
         p[0] = [p[1]]
 
-    def p_projectdata(self, p):
+    def p_projectdata_fullintervals(self, p):
         'projectdata : intervals activities'
         p[0] = {'work_time': p[1], 'activities': p[2],
+            'project': self._current_project}
+
+    def p_projectdata_partialintervals(self, p):
+        'projectdata : partialintervals activities'
+        p[0] = {'work_time_partial': p[1], 'activities': p[2],
             'project': self._current_project}
 
     def p_defaultproject(self, p):
@@ -166,6 +171,18 @@ class PlyScrumParser(object):
     def p_interval(self, p):
         'interval : TIME TIME EOL'
         p[0] = convert_to_minutes(p[2]) - convert_to_minutes(p[1])
+
+    def p_partialintervals_multiple(self, p):
+        'partialintervals : intervals semiinterval'
+        p[0] = p[1]
+
+    def p_partialintervals_single(self, p):
+        'partialintervals : semiinterval'
+        p[0] = p[1]
+
+    def p_semiinterval(self, p):
+        'semiinterval : TIME EOL'
+        p[0] = 0
 
     def p_activities(self, p):
         'activities : activity'
@@ -190,6 +207,9 @@ class PlyScrumParser(object):
     def p_taskidentifier_notavailable(self, p):
         'taskidentifier : NA'
         p[0] = p[1]
+    
+    def p_error(self, error):
+        print error
 
 class ScrumParser(object):
     def __init__(self, default_project):

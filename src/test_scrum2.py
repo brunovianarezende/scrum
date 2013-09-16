@@ -154,6 +154,77 @@ NA (Second) - Second activity
             result = parser.parse(p)
             self.assertEqual(result, expected)
 
+        parser_input = """
+26/07/2013
+7:17
+#4133 (Make Mariupol site and agent work together) - doing
+#1 (new test) - doing too
+NA (Not Available) - testing everything
+"""
+        expected = [
+            {
+            'activities': [
+                {
+                 'description': 'doing',
+                 'ticket': '4133',
+                 'title': 'Make Mariupol site and agent work together'
+                 },
+                {
+                 'description': 'doing too',
+                 'ticket': '1',
+                 'title': 'new test'
+                 },
+                {
+                 'description': 'testing everything',
+                 'ticket': 'NA',
+                 'title': 'Not Available'
+                 },
+            ],
+            'day': '26/07/2013',
+            'work_time_partial': 0,
+            'project': 'Project',
+            }
+        ]
+        for p in parser_input.strip(), parser_input.strip() + '\n':
+            result = parser.parse(p)
+            self.assertEqual(result, expected)
+
+        parser_input = """
+26/07/2013
+7:17 9:17
+9:18
+#4133 (Make Mariupol site and agent work together) - doing
+#1 (new test) - doing too
+NA (Not Available) - testing everything
+"""
+        expected = [
+            {
+            'activities': [
+                {
+                 'description': 'doing',
+                 'ticket': '4133',
+                 'title': 'Make Mariupol site and agent work together'
+                 },
+                {
+                 'description': 'doing too',
+                 'ticket': '1',
+                 'title': 'new test'
+                 },
+                {
+                 'description': 'testing everything',
+                 'ticket': 'NA',
+                 'title': 'Not Available'
+                 },
+            ],
+            'day': '26/07/2013',
+            'work_time_partial': 120,
+            'project': 'Project',
+            }
+        ]
+        for p in parser_input.strip(), parser_input.strip() + '\n':
+            result = parser.parse(p)
+            self.assertEqual(result, expected)
+
 class TestScrumParser(unittest.TestCase):
     def test_parse(self):
         parser_input = """\
