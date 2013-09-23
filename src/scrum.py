@@ -6,16 +6,27 @@ def main():
     parser = ScrumParser('')
     days = parser.parse(open('/home/brunore/Desktop/cs_data2.txt').readlines())
     day, projects_work = days.next()
-    print_for_spread_sheet(projects_work)
+    full_data = True
+    for pw in projects_work:
+        if 'work_time_partial' in pw:
+            full_data = False
+            break
+    if full_data:
+        print_for_spread_sheet(projects_work)
     print ''
     today = datetime.datetime.now().date()
+    if today == day:
+        today_scrum_data = (day, projects_work)
+        day, projects_work = days.next()
+    else:
+        today_scrum_data = None
     scrum_data = [(day, projects_work)]
     if day.weekday() in (5, 6):
         for day, projects_work in days:
             scrum_data.append((day, projects_work))
             if day.weekday() not in (5, 6):
                 break
-    print_for_scrum(today, scrum_data)
+    print_for_scrum(today, scrum_data, today_scrum_data)
 
 DAYS = dict(enumerate(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']))
 
@@ -29,7 +40,7 @@ def print_for_spread_sheet(projects_work):
         day, project = pw['day'], pw['project']
         print '\t'.join((day, project, ids, titles, worked_time, descriptions))
 
-def print_for_scrum(today, scrum_data):
+def print_for_scrum(today, scrum_data, today_scrum_data):
     for scrum_day, projects_work in scrum_data:
         if scrum_day.weekday() in (5, 6):
             scrum_day = DAYS[scrum_day.weekday()]
@@ -44,8 +55,16 @@ def print_for_scrum(today, scrum_data):
                 if ticket.isdigit():
                     ticket = '#' + ticket
                 print '%s (%s) - %s' % (ticket, a['title'], a['description'])
-    print '\n'
+    print ''
     print '[today]'
+    if today_scrum_data:
+        _, projects_work = today_scrum_data
+        for project_work in projects_work:
+            for a in project_work['activities']:
+                ticket = a['ticket']
+                if ticket.isdigit():
+                    ticket = '#' + ticket
+                print '%s (%s) - %s' % (ticket, a['title'], a['description'])
 
 def format_activities(activities):
     """
