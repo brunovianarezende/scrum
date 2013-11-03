@@ -4,15 +4,13 @@ from scrumparser import ScrumParser
 
 def main():
     parser = ScrumParser('')
-    days = parser.parse(open('/home/brunore/Desktop/cs_data2.txt').readlines())
+    days = parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
     day, projects_work = days.next()
-    full_data = True
-    for pw in projects_work:
-        if 'work_time_partial' in pw:
-            full_data = False
-            break
+    full_data = all('work_time_partial' not in pw for pw in projects_work)
     if full_data:
         print_for_spread_sheet(projects_work)
+    else:
+        print_current_worked_time(projects_work)
     print ''
     today = datetime.datetime.now().date()
     if today == day:
@@ -29,6 +27,20 @@ def main():
     print_for_scrum(today, scrum_data, today_scrum_data)
 
 DAYS = dict(enumerate(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']))
+
+def print_current_worked_time(projects_work):
+    now = datetime.datetime.now()
+    normalized = now.hour * 60 + now.minute
+    total = 0
+    for pw in projects_work:
+        if 'work_time_partial' not in pw:
+            total += pw['work_time']
+        else:
+            worked, pending = pw['work_time_partial']
+            total += worked
+            hour, minute = (int(p) for p in pending.split(':'))
+            total += normalized - (hour*60 + minute)
+    print 'worked time: ', format_minutes(total)
 
 def print_for_spread_sheet(projects_work):
     for pw in projects_work:
@@ -65,6 +77,10 @@ def print_for_scrum(today, scrum_data, today_scrum_data):
                 if ticket.isdigit():
                     ticket = '#' + ticket
                 print '%s (%s) - %s' % (ticket, a['title'], a['description'])
+    
+    print ''
+    print '[obstacles]'
+    print '#None'
 
 def format_activities(activities):
     """

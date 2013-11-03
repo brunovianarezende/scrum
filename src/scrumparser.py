@@ -176,15 +176,15 @@ class PlyScrumParser(object):
 
     def p_partialintervals_multiple(self, p):
         'partialintervals : intervals semiinterval'
-        p[0] = p[1]
+        p[0] = (p[1], p[2])
 
     def p_partialintervals_single(self, p):
         'partialintervals : semiinterval'
-        p[0] = p[1]
+        p[0] = (0, p[1])
 
     def p_semiinterval(self, p):
         'semiinterval : TIME EOL'
-        p[0] = 0
+        p[0] = p[1]
 
     def p_activities(self, p):
         'activities : activity'

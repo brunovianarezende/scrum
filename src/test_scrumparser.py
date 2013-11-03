@@ -182,7 +182,7 @@ NA (Not Available) - testing everything
                  },
             ],
             'day': '26/07/2013',
-            'work_time_partial': 0,
+            'work_time_partial': (0, '7:17'),
             'project': 'Project',
             }
         ]
@@ -218,7 +218,7 @@ NA (Not Available) - testing everything
                  },
             ],
             'day': '26/07/2013',
-            'work_time_partial': 120,
+            'work_time_partial': (120, '9:18'),
             'project': 'Project',
             }
         ]
@@ -255,6 +255,17 @@ DefaultProject: other project
 10:00 12:06
 #25 (other title) - really doing
 """
+# 
+# 23/07/2013
+# 7:17 8:17
+# 8:20 9:20
+# #4133 (Make Mariupol site and agent work together) - doing
+# 13:25 14:26
+# #1 (new test) - doing too
+# NA (Not Available) - testing everything
+# Project: New Project Name
+# 9:30 9:50
+# #1234 (First) - First activity
         parser = ScrumParser('')
         items = parser.parse(parser_input.split('\n'))
         expected = (datetime.date(2013, 7, 26), [
@@ -336,5 +347,47 @@ DefaultProject: other project
             },
         ])
         self.assertEqual(items.next(), expected)
+
+#         expected = (datetime.date(2013, 7, 23), [
+#             {
+#              'activities': [
+#                 {
+#                  'description': 'doing',
+#                  'ticket': '4133',
+#                  'title': 'Make Mariupol site and agent work together',
+#                  'work_time': 120,
+#                  },
+#                 {
+#                  'description': 'doing too',
+#                  'ticket': '1',
+#                  'title': 'new test',
+#                  'work_time_estimate': 30,
+#                  },
+#                 {
+#                  'description': 'testing everything',
+#                  'ticket': 'NA',
+#                  'title': 'Not Available',
+#                  'work_time_estimate': 31,
+#                  },
+#             ],
+#             'day': '23/07/2013',
+#             'work_time': 181,
+#             'project': 'other project',
+#             },
+#             {
+#              'activities': [
+#                 {
+#                  'description': 'First activity',
+#                  'ticket': '1234',
+#                  'title': 'First',
+#                  'work_time': 20,
+#                  },
+#             ],
+#             'day': '23/07/2013',
+#             'work_time': 20,
+#             'project': 'New Project Name',
+#             },
+#         ])
+#         self.assertEqual(items.next(), expected)
 
         self.assertRaises(StopIteration, items.next)
