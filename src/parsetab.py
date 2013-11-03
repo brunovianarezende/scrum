@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = '\x14!\xa9\x0c{@p\xf8A\xda\x10h\x7f\x84R\x9d'
+_lr_signature = '\x98\x1b\x0f.\xb5\xe1\xac"<i\xa4|O\r\xd7\xd2'
     
-_lr_action_items = {'LPARENTHESIS':([22,25,32,],[-20,33,-19,]),'TITLE':([33,],[35,]),'NUMBER':([23,],[32,]),'PROJECTNAME':([2,19,],[6,30,]),'NUMBERSIGN':([11,12,13,14,16,20,21,24,26,27,28,31,39,],[-11,-14,23,23,-15,23,-10,-13,-16,23,-12,-17,-18,]),'ACTIVITY':([37,],[38,]),'DEFAULTPROJECT':([0,],[2,]),'NA':([11,12,13,14,16,20,21,24,26,27,28,31,39,],[-11,-14,22,22,-15,22,-10,-13,-16,22,-12,-17,-18,]),'EOL':([5,6,9,17,30,38,],[7,8,16,28,34,39,]),'PROJECT':([10,15,20,26,27,29,31,39,],[19,-6,-7,-16,-8,-4,-17,-18,]),'SEPARATOR':([36,],[37,]),'RPARENTHESIS':([35,],[36,]),'TIME':([7,9,11,13,18,21,28,34,],[9,17,-11,9,9,-10,-12,-5,]),'DAY':([0,],[5,]),'$end':([1,3,4,8,10,15,20,26,27,29,31,39,],[-1,-2,0,-9,-3,-6,-7,-16,-8,-4,-17,-18,]),}
+_lr_action_items = {'LPARENTHESIS':([28,31,42,],[-28,43,-27,]),'TITLE':([43,],[45,]),'NUMBER':([29,],[42,]),'PROJECTNAME':([2,23,],[6,39,]),'NUMBERSIGN':([9,13,14,16,20,26,27,30,32,33,35,37,41,49,],[-19,-22,29,29,-23,29,-18,-21,-24,29,29,-20,-25,-26,]),'ACTIVITY':([47,],[48,]),'DEFAULTPROJECT':([0,],[2,]),'NA':([9,13,14,16,20,26,27,30,32,33,35,37,41,49,],[-19,-22,28,28,-23,28,-18,-21,-24,28,28,-20,-25,-26,]),'EOL':([5,6,10,21,39,48,],[7,8,20,37,44,49,]),'PROJECT':([11,12,15,17,18,19,24,25,26,32,33,34,38,40,41,49,],[23,-7,-10,-15,-6,-8,-9,-12,-11,-24,-16,-13,-4,-14,-25,-26,]),'SEPARATOR':([46,],[47,]),'RPARENTHESIS':([45,],[46,]),'TIME':([7,9,10,12,14,15,17,22,24,25,26,27,32,33,34,35,36,37,40,41,44,49,],[10,-19,21,10,10,-10,36,10,-9,36,-11,-18,-24,-16,36,36,21,-20,36,-25,-5,-26,]),'DAY':([0,],[5,]),'$end':([1,3,4,8,11,12,15,17,18,19,24,25,26,32,33,34,38,40,41,49,],[-1,-2,0,-17,-3,-7,-10,-15,-6,-8,-9,-12,-11,-24,-16,-13,-4,-14,-25,-26,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'dayinfo':([0,],[1,]),'activities':([13,14,],[20,27,]),'projectsdata':([7,],[10,]),'interval':([7,13,18,],[11,21,11,]),'defaultproject':([0,],[3,]),'semiinterval':([7,13,18,],[12,24,12,]),'changeprojectinfo':([10,],[18,]),'content':([0,],[4,]),'intervals':([7,18,],[13,13,]),'taskidentifier':([13,14,20,27,],[25,25,25,25,]),'partialintervals':([7,18,],[14,14,]),'activity':([13,14,20,27,],[26,26,31,31,]),'projectdata':([7,18,],[15,29,]),}
+_lr_goto_items = {'dayinfo':([0,],[1,]),'activitiesdatamult':([7,17,22,25,],[12,34,12,40,]),'activities':([14,16,35,],[26,33,26,]),'projectsdata':([7,],[11,]),'interval':([7,12,14,17,22,25,34,35,40,],[9,9,27,9,9,9,9,27,9,]),'defaultproject':([0,],[3,]),'semiinterval':([7,12,14,22,],[13,13,30,13,]),'changeprojectinfo':([11,],[22,]),'content':([0,],[4,]),'intervals':([7,12,17,22,25,34,40,],[14,14,35,14,35,35,35,]),'taskidentifier':([14,16,26,33,35,],[31,31,31,31,31,]),'activitiesdata':([7,12,17,22,25,34,40,],[15,24,15,15,15,24,24,]),'partialintervals':([7,12,22,],[16,16,16,]),'partialactivitiesdata':([7,12,22,],[17,25,17,]),'activity':([14,16,26,33,35,],[32,32,41,41,32,]),'projectdata':([7,22,],[18,38,]),'partialactivitiesdatamult':([7,22,],[19,19,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -26,24 +26,32 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> content","S'",1,None,None,None),
-  ('content -> dayinfo','content',1,'p_content','/home/brunore/cs/workspace/utils/src/scrum2.py',125),
-  ('content -> defaultproject','content',1,'p_content','/home/brunore/cs/workspace/utils/src/scrum2.py',126),
-  ('dayinfo -> DAY EOL projectsdata','dayinfo',3,'p_dayinfo','/home/brunore/cs/workspace/utils/src/scrum2.py',130),
-  ('projectsdata -> projectsdata changeprojectinfo projectdata','projectsdata',3,'p_projectsdata_multiple','/home/brunore/cs/workspace/utils/src/scrum2.py',138),
-  ('changeprojectinfo -> PROJECT PROJECTNAME EOL','changeprojectinfo',3,'p_changeprojectinfo','/home/brunore/cs/workspace/utils/src/scrum2.py',142),
-  ('projectsdata -> projectdata','projectsdata',1,'p_projectsdata_single','/home/brunore/cs/workspace/utils/src/scrum2.py',146),
-  ('projectdata -> intervals activities','projectdata',2,'p_projectdata_fullintervals','/home/brunore/cs/workspace/utils/src/scrum2.py',150),
-  ('projectdata -> partialintervals activities','projectdata',2,'p_projectdata_partialintervals','/home/brunore/cs/workspace/utils/src/scrum2.py',155),
-  ('defaultproject -> DEFAULTPROJECT PROJECTNAME EOL','defaultproject',3,'p_defaultproject','/home/brunore/cs/workspace/utils/src/scrum2.py',160),
-  ('intervals -> intervals interval','intervals',2,'p_intervals_multiple','/home/brunore/cs/workspace/utils/src/scrum2.py',164),
-  ('intervals -> interval','intervals',1,'p_intervals_single','/home/brunore/cs/workspace/utils/src/scrum2.py',168),
-  ('interval -> TIME TIME EOL','interval',3,'p_interval','/home/brunore/cs/workspace/utils/src/scrum2.py',172),
-  ('partialintervals -> intervals semiinterval','partialintervals',2,'p_partialintervals_multiple','/home/brunore/cs/workspace/utils/src/scrum2.py',176),
-  ('partialintervals -> semiinterval','partialintervals',1,'p_partialintervals_single','/home/brunore/cs/workspace/utils/src/scrum2.py',180),
-  ('semiinterval -> TIME EOL','semiinterval',2,'p_semiinterval','/home/brunore/cs/workspace/utils/src/scrum2.py',184),
-  ('activities -> activity','activities',1,'p_activities','/home/brunore/cs/workspace/utils/src/scrum2.py',188),
-  ('activities -> activities activity','activities',2,'p_activities_multiple','/home/brunore/cs/workspace/utils/src/scrum2.py',192),
-  ('activity -> taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL','activity',7,'p_activity_single','/home/brunore/cs/workspace/utils/src/scrum2.py',196),
-  ('taskidentifier -> NUMBERSIGN NUMBER','taskidentifier',2,'p_taskidentifier_available','/home/brunore/cs/workspace/utils/src/scrum2.py',204),
-  ('taskidentifier -> NA','taskidentifier',1,'p_taskidentifier_notavailable','/home/brunore/cs/workspace/utils/src/scrum2.py',208),
+  ('content -> dayinfo','content',1,'p_content','/home/brunore/cs/workspace/utils/src/scrumparser.py',131),
+  ('content -> defaultproject','content',1,'p_content','/home/brunore/cs/workspace/utils/src/scrumparser.py',132),
+  ('dayinfo -> DAY EOL projectsdata','dayinfo',3,'p_dayinfo','/home/brunore/cs/workspace/utils/src/scrumparser.py',136),
+  ('projectsdata -> projectsdata changeprojectinfo projectdata','projectsdata',3,'p_projectsdata_multiple','/home/brunore/cs/workspace/utils/src/scrumparser.py',144),
+  ('changeprojectinfo -> PROJECT PROJECTNAME EOL','changeprojectinfo',3,'p_changeprojectinfo','/home/brunore/cs/workspace/utils/src/scrumparser.py',148),
+  ('projectsdata -> projectdata','projectsdata',1,'p_projectsdata_single','/home/brunore/cs/workspace/utils/src/scrumparser.py',154),
+  ('projectdata -> activitiesdatamult','projectdata',1,'p_projectdata_fullintervals','/home/brunore/cs/workspace/utils/src/scrumparser.py',158),
+  ('projectdata -> partialactivitiesdatamult','projectdata',1,'p_projectdata_partialintervals','/home/brunore/cs/workspace/utils/src/scrumparser.py',165),
+  ('activitiesdatamult -> activitiesdatamult activitiesdata','activitiesdatamult',2,'p_activitiesdatamult_multiple','/home/brunore/cs/workspace/utils/src/scrumparser.py',172),
+  ('activitiesdatamult -> activitiesdata','activitiesdatamult',1,'p_activitiesdatamult_single','/home/brunore/cs/workspace/utils/src/scrumparser.py',179),
+  ('activitiesdata -> intervals activities','activitiesdata',2,'p_activitiesdata','/home/brunore/cs/workspace/utils/src/scrumparser.py',183),
+  ('partialactivitiesdatamult -> activitiesdatamult partialactivitiesdata','partialactivitiesdatamult',2,'p_partialactivitiesdatamult_multiple1','/home/brunore/cs/workspace/utils/src/scrumparser.py',189),
+  ('partialactivitiesdatamult -> partialactivitiesdata activitiesdatamult','partialactivitiesdatamult',2,'p_partialactivitiesdatamult_multiple2','/home/brunore/cs/workspace/utils/src/scrumparser.py',193),
+  ('partialactivitiesdatamult -> activitiesdatamult partialactivitiesdata activitiesdatamult','partialactivitiesdatamult',3,'p_partialactivitiesdatamult_multiple3','/home/brunore/cs/workspace/utils/src/scrumparser.py',197),
+  ('partialactivitiesdatamult -> partialactivitiesdata','partialactivitiesdatamult',1,'p_partialactivitiesdatamult_single','/home/brunore/cs/workspace/utils/src/scrumparser.py',217),
+  ('partialactivitiesdata -> partialintervals activities','partialactivitiesdata',2,'p_partialactivitiesdata','/home/brunore/cs/workspace/utils/src/scrumparser.py',221),
+  ('defaultproject -> DEFAULTPROJECT PROJECTNAME EOL','defaultproject',3,'p_defaultproject','/home/brunore/cs/workspace/utils/src/scrumparser.py',227),
+  ('intervals -> intervals interval','intervals',2,'p_intervals_multiple','/home/brunore/cs/workspace/utils/src/scrumparser.py',231),
+  ('intervals -> interval','intervals',1,'p_intervals_single','/home/brunore/cs/workspace/utils/src/scrumparser.py',235),
+  ('interval -> TIME TIME EOL','interval',3,'p_interval','/home/brunore/cs/workspace/utils/src/scrumparser.py',239),
+  ('partialintervals -> intervals semiinterval','partialintervals',2,'p_partialintervals_multiple','/home/brunore/cs/workspace/utils/src/scrumparser.py',243),
+  ('partialintervals -> semiinterval','partialintervals',1,'p_partialintervals_single','/home/brunore/cs/workspace/utils/src/scrumparser.py',247),
+  ('semiinterval -> TIME EOL','semiinterval',2,'p_semiinterval','/home/brunore/cs/workspace/utils/src/scrumparser.py',251),
+  ('activities -> activity','activities',1,'p_activities','/home/brunore/cs/workspace/utils/src/scrumparser.py',255),
+  ('activities -> activities activity','activities',2,'p_activities_multiple','/home/brunore/cs/workspace/utils/src/scrumparser.py',259),
+  ('activity -> taskidentifier LPARENTHESIS TITLE RPARENTHESIS SEPARATOR ACTIVITY EOL','activity',7,'p_activity_single','/home/brunore/cs/workspace/utils/src/scrumparser.py',263),
+  ('taskidentifier -> NUMBERSIGN NUMBER','taskidentifier',2,'p_taskidentifier_available','/home/brunore/cs/workspace/utils/src/scrumparser.py',273),
+  ('taskidentifier -> NA','taskidentifier',1,'p_taskidentifier_notavailable','/home/brunore/cs/workspace/utils/src/scrumparser.py',277),
 ]

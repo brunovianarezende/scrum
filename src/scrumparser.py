@@ -113,6 +113,8 @@ class PlyScrumParser(object):
         lexer.build()
         self.default_project = default_project
         self._current_project = default_project
+        self._times_groups = {}
+        self._current_time_group = 1
         self.lexer = lexer.lexer
         self.tokens = lexer.tokens
         self.yacc = yacc.yacc(module=self)
@@ -121,6 +123,8 @@ class PlyScrumParser(object):
         input_string = input_string.strip() + '\n'
         result = self.yacc.parse(input_string, lexer=self.lexer)
         self._current_project = self.default_project
+        self._times_groups = {}
+        self._current_time_group = 1
         return result
 
     def p_content(self, p):
@@ -143,20 +147,81 @@ class PlyScrumParser(object):
     def p_changeprojectinfo(self, p):
         'changeprojectinfo : PROJECT PROJECTNAME EOL'
         self._current_project = p[2].strip()
+        self._current_time_group = 1
+        self._times_groups = {}
 
     def p_projectsdata_single(self, p):
         'projectsdata : projectdata'
         p[0] = [p[1]]
 
     def p_projectdata_fullintervals(self, p):
-        'projectdata : intervals activities'
-        p[0] = {'work_time': p[1], 'activities': p[2],
-            'project': self._current_project}
+        'projectdata : activitiesdatamult'
+        p[0] = dict(p[1])
+        p[0]['project'] = self._current_project
+        if len(self._times_groups) != 1:
+            p[0]['time_groups'] = self._times_groups
 
     def p_projectdata_partialintervals(self, p):
-        'projectdata : partialintervals activities'
-        p[0] = {'work_time_partial': p[1], 'activities': p[2],
-            'project': self._current_project}
+        'projectdata : partialactivitiesdatamult'
+        p[0] = dict(p[1])
+        p[0]['project'] = self._current_project
+        if len(self._times_groups) != 1:
+            p[0]['time_groups'] = self._times_groups
+
+    def p_activitiesdatamult_multiple(self, p):
+        'activitiesdatamult : activitiesdatamult activitiesdata'
+        merged = dict(p[1])
+        merged['work_time'] += p[2]['work_time']
+        merged['activities'].extend(p[2]['activities'])
+        p[0] = merged
+
+    def p_activitiesdatamult_single(self, p):
+        'activitiesdatamult : activitiesdata'
+        p[0] = p[1]
+
+    def p_activitiesdata(self, p):
+        'activitiesdata : intervals activities'
+        self._times_groups[self._current_time_group] = p[1]
+        self._current_time_group += 1
+        p[0] = {'work_time': p[1], 'activities': p[2],}
+
+    def p_partialactivitiesdatamult_multiple1(self, p):
+        'partialactivitiesdatamult : activitiesdatamult partialactivitiesdata'
+        p[0] = self._gen_partialactivities_data(p[1], p[2])
+
+    def p_partialactivitiesdatamult_multiple2(self, p):
+        'partialactivitiesdatamult : partialactivitiesdata activitiesdatamult'
+        p[0] = self._gen_partialactivities_data(p[1], p[2])
+
+    def p_partialactivitiesdatamult_multiple3(self, p):
+        'partialactivitiesdatamult : activitiesdatamult partialactivitiesdata activitiesdatamult'
+        partial = self._gen_partialactivities_data(p[1], p[2])
+        p[0] = self._gen_partialactivities_data(partial, p[3])
+
+    def _gen_partialactivities_data(self, item1, item2):
+        result = {}
+        if 'work_time_partial' in item1:
+            partial, full = item1, item2
+        else:
+            partial, full = item2, item1
+        partial_time, partial_interval = partial['work_time_partial']
+        partial_time += full['work_time']
+        activities = []
+        activities.extend(item1['activities'])
+        activities.extend(item2['activities'])
+        result['work_time_partial'] = (partial_time, partial_interval)
+        result['activities'] = activities
+        return result
+
+    def p_partialactivitiesdatamult_single(self, p):
+        'partialactivitiesdatamult : partialactivitiesdata'
+        p[0] = p[1]
+
+    def p_partialactivitiesdata(self, p):
+        'partialactivitiesdata : partialintervals activities'
+        self._times_groups[self._current_time_group] = p[1]
+        self._current_time_group += 1
+        p[0] = {'work_time_partial': p[1], 'activities': p[2],}
 
     def p_defaultproject(self, p):
         'defaultproject : DEFAULTPROJECT PROJECTNAME EOL'
@@ -201,6 +266,8 @@ class PlyScrumParser(object):
             'ticket': p[1],
             'title': p[3].strip(),
         }
+        if self._current_time_group != 1:
+            p[0]['time_group'] = self._current_time_group
 
     def p_taskidentifier_available(self, p):
         'taskidentifier : NUMBERSIGN NUMBER'
