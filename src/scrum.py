@@ -12,6 +12,8 @@ def main():
     else:
         print_current_worked_time(projects_work)
     print ''
+    print_time_per_activity(projects_work)
+    print ''
     today = datetime.datetime.now().date()
     if today == day:
         today_scrum_data = (day, projects_work)
@@ -42,6 +44,27 @@ def print_current_worked_time(projects_work):
             total += normalized - (hour*60 + minute)
     print 'worked time: ', format_minutes(total)
 
+def print_time_per_activity(projects_work):
+    print 'time spent per activity group:'
+    for pw in projects_work:
+        if 'time_groups' in pw:
+            time_groups = pw['time_groups']
+        else:
+            time_groups = {1: pw.get('work_time', pw.get('work_time_partial'))}
+        data = {}
+        for activity in pw['activities']:
+            time_group = activity.get('time_group', 1)
+            time_data = data.setdefault(time_group, {})
+            time_data['time'] = time_groups[time_group]
+            time_data.setdefault('activities', []).append(activity)
+        for _, time_data in sorted(data.iteritems()):
+            print format_minutes(time_data['time'])
+            for a in time_data['activities']:
+                ticket = a['ticket']
+                if ticket.isdigit():
+                    ticket = '#' + ticket
+                print '%s (%s) - %s' % (ticket, a['title'], a['description'])
+
 def print_for_spread_sheet(projects_work):
     for pw in projects_work:
         ids, titles, descriptions = format_activities([
@@ -53,6 +76,7 @@ def print_for_spread_sheet(projects_work):
         print '\t'.join((day, project, ids, titles, worked_time, descriptions))
 
 def print_for_scrum(today, scrum_data, today_scrum_data):
+    print 'data for scrum:'
     for scrum_day, projects_work in scrum_data:
         if scrum_day.weekday() in (5, 6):
             scrum_day = DAYS[scrum_day.weekday()]
