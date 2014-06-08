@@ -149,6 +149,10 @@ class PlyScrumParser(object):
         self._current_time_group = 1
         self._times_groups = {}
 
+    def p_projectsdata_single_changeprojectinfo(self, p):
+        'projectsdata : changeprojectinfo  projectdata'
+        p[0] = [p[2]]
+
     def p_projectsdata_single(self, p):
         'projectsdata : projectdata'
         p[0] = [p[1]]

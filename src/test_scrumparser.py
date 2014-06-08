@@ -421,6 +421,42 @@ NA (Not Available) - testing everything
         expected = None
         test_with_eol(parser_input, expected)
 
+        parser_input = """
+DefaultProject: Some default Project
+
+23/07/2013
+Project: my nice project
+7:17 8:17
+#4133 (Make Mariupol site and agent work together) - doing
+8:20 8:25
+#DC-10 (new test) - doing too
+"""
+        expected = [
+            {
+            'activities': [
+                {
+                 'description': 'doing',
+                 'ticket': '4133',
+                 'title': 'Make Mariupol site and agent work together',
+                 },
+                {
+                 'description': 'doing too',
+                 'ticket': 'DC-10',
+                 'title': 'new test',
+                 'time_group': 2,
+                 },
+            ],
+            'time_groups': {
+                1: 60,
+                2: 5,
+            },
+            'day': '23/07/2013',
+            'work_time': 65,
+            'project': 'my nice project',
+            },
+        ]
+        test_with_eol(parser_input, expected)
+
 class TestScrumParser(unittest.TestCase):
     def test_parse(self):
         parser_input = """\
