@@ -3,6 +3,8 @@ import datetime
 import ply.lex as lex
 import ply.yacc as yacc
 
+DEV_MODE = False
+
 class ScrumLexer(object):
     tokens = ('DAY', 'EOL', 'TIME', 'NA', 'LPARENTHESIS',
         'RPARENTHESIS', 'TITLE', 'ACTIVITY', 'SEPARATOR', 
@@ -116,7 +118,10 @@ class PlyScrumParser(object):
         self._current_time_group = 1
         self.lexer = lexer.lexer
         self.tokens = lexer.tokens
-        self.yacc = yacc.yacc(module=self)
+        if DEV_MODE:
+            self.yacc = yacc.yacc(module=self)
+        else:
+            self.yacc = yacc.yacc(module=self, debug=0, write_tables=0)
 
     def parse(self, input_string):
         input_string = input_string.strip() + '\n'

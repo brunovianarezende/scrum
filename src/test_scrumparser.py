@@ -1,6 +1,8 @@
 import unittest
 import datetime
 
+import scrumparser
+scrumparser.DEV_MODE = True
 from scrumparser import ScrumLexer, PlyScrumParser, ScrumParser
 
 class TestScrumLexer(unittest.TestCase):
