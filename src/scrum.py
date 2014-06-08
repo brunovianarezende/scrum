@@ -50,7 +50,15 @@ def print_time_per_activity(projects_work):
         if 'time_groups' in pw:
             time_groups = pw['time_groups']
         else:
-            time_groups = {1: pw.get('work_time', pw.get('work_time_partial'))}
+            total = 0
+            if 'work_time' not in pw:
+                now = datetime.datetime.now()
+                normalized = now.hour * 60 + now.minute
+                worked, pending = pw['work_time_partial']
+                total = worked
+                hour, minute = (int(p) for p in pending.split(':'))
+                total += normalized - (hour*60 + minute)
+            time_groups = {1: pw.get('work_time', total)}
         data = {}
         for activity in pw['activities']:
             time_group = activity.get('time_group', 1)

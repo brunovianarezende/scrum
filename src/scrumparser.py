@@ -4,9 +4,9 @@ import ply.lex as lex
 import ply.yacc as yacc
 
 class ScrumLexer(object):
-    tokens = ('DAY', 'EOL', 'TIME', 'NA', 'NUMBER', 'LPARENTHESIS',
-        'RPARENTHESIS', 'TITLE', 'ACTIVITY', 'SEPARATOR', 'NUMBERSIGN',
-        'DEFAULTPROJECT', 'PROJECTNAME', 'PROJECT',
+    tokens = ('DAY', 'EOL', 'TIME', 'NA', 'LPARENTHESIS',
+        'RPARENTHESIS', 'TITLE', 'ACTIVITY', 'SEPARATOR', 
+        'DEFAULTPROJECT', 'PROJECTNAME', 'PROJECT', 'TASKIDENTIFIER'
     )
     states = (
         ('taskdescription', 'exclusive'),
@@ -17,10 +17,9 @@ class ScrumLexer(object):
     
     t_DAY = r'\d\d/\d\d/\d\d\d\d'
     t_EOL = r'\n'
-    t_NUMBERSIGN = r'\#'
+    t_TASKIDENTIFIER = r'\#[^ \(]+'
     t_TIME = r'\d?\d:\d\d'
     t_NA = r'NA'
-    t_NUMBER = r'\d+'
     t_ignore  = ' \t'
     t_taskdescription_TITLE = r'[^\)]+'
     t_activity_ACTIVITY = r'[^\n]+'
@@ -270,8 +269,8 @@ class PlyScrumParser(object):
             p[0]['time_group'] = self._current_time_group
 
     def p_taskidentifier_available(self, p):
-        'taskidentifier : NUMBERSIGN NUMBER'
-        p[0] = p[2]
+        'taskidentifier : TASKIDENTIFIER'
+        p[0] = p[1].lstrip('#')
 
     def p_taskidentifier_notavailable(self, p):
         'taskidentifier : NA'
