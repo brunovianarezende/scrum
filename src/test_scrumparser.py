@@ -424,14 +424,9 @@ NA (Not Available) - testing everything
         test_with_eol(parser_input, expected)
 
         parser_input = """
-DefaultProject: Some default Project
-
 23/07/2013
-Project: my nice project
 7:17 8:17
-#4133 (Make Mariupol site and agent work together) - doing
-8:20 8:25
-#DC-10 (new test) - doing too
+#4133 (let's see if escape like \) works) - doing
 """
         expected = [
             {
@@ -439,22 +434,12 @@ Project: my nice project
                 {
                  'description': 'doing',
                  'ticket': '4133',
-                 'title': 'Make Mariupol site and agent work together',
-                 },
-                {
-                 'description': 'doing too',
-                 'ticket': 'DC-10',
-                 'title': 'new test',
-                 'time_group': 2,
-                 },
+                 'title': "let's see if escape like ) works",
+                 }
             ],
-            'time_groups': {
-                1: 60,
-                2: 5,
-            },
             'day': '23/07/2013',
-            'work_time': 65,
-            'project': 'my nice project',
+            'work_time': 60,
+            'project': 'Project',
             },
         ]
         test_with_eol(parser_input, expected)

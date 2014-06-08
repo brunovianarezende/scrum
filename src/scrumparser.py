@@ -23,7 +23,7 @@ class ScrumLexer(object):
     t_TIME = r'\d?\d:\d\d'
     t_NA = r'NA'
     t_ignore  = ' \t'
-    t_taskdescription_TITLE = r'[^\)]+'
+    t_taskdescription_TITLE = r'(?:(?:[^\\\)]+\\\))|[^\)]+)+'
     t_activity_ACTIVITY = r'[^\n]+'
     t_defaultproject_PROJECTNAME = r'[^\n]+'
     t_project_PROJECTNAME = r'[^\n]+'
@@ -272,7 +272,7 @@ class PlyScrumParser(object):
         p[0] = {
             'description': p[6].strip(),
             'ticket': p[1],
-            'title': p[3].strip(),
+            'title': p[3].replace('\\)', ')').strip(),
         }
         if self._current_time_group != 1:
             p[0]['time_group'] = self._current_time_group
