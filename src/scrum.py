@@ -3,17 +3,34 @@ import datetime
 from scrumparser import ScrumParser
 
 def main():
+    processors = [spreadsheet_printer, current_worked_time_printer,
+                  per_activity_printer, scrum_printer]
     parser = ScrumParser('')
-    days = parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
-    day, projects_work = days.next()
+    for processor in processors:
+        days = parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
+        processor(days)
+
+def spreadsheet_printer(days):
+    _, projects_work = days.next()
     full_data = all('work_time_partial' not in pw for pw in projects_work)
     if full_data:
         print_for_spread_sheet(projects_work)
-    else:
+        print ''
+
+def current_worked_time_printer(days):
+    _, projects_work = days.next()
+    full_data = all('work_time_partial' not in pw for pw in projects_work)
+    if not full_data:
         print_current_worked_time(projects_work)
-    print ''
+        print ''
+
+def per_activity_printer(days):
+    _, projects_work = days.next()
     print_time_per_activity(projects_work)
     print ''
+
+def scrum_printer(days):
+    day, projects_work = days.next()
     today = datetime.datetime.now().date()
     if today == day:
         today_scrum_data = (day, projects_work)
