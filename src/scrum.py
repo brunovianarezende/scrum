@@ -1,13 +1,33 @@
+import argparse
 import datetime
 
 from scrumparser import ScrumParser
+from processors import PROCESSORS
 
 def main():
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('-p', '--processor', help="run the processor. By"
+        " default only print processors run.", action="append")
+    arg_parser.add_argument('-l', '--listprocessors', help="list all available"
+        " processors.", action='store_true')
+    args = arg_parser.parse_args()
+
+    if args.listprocessors:
+        print 'optional processors:'
+        print '\n'.join('- %s' % k for k in PROCESSORS.keys())
+        return
+    
+    new_processors = []
+    if args.processor:
+        new_processors.extend(PROCESSORS[p] for p in args.processor
+                              if p in PROCESSORS)
+    
     processors = [spreadsheet_printer, current_worked_time_printer,
                   per_activity_printer, scrum_printer]
-    parser = ScrumParser('')
+    processors.extend(new_processors)
+    scrum_parser = ScrumParser('')
     for processor in processors:
-        days = parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
+        days = scrum_parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
         processor(days)
 
 def spreadsheet_printer(days):
