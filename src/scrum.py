@@ -8,31 +8,54 @@ def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('-p', '--processor', help="run the processor. By"
         " default only print processors run.", action="append")
+    arg_parser.add_argument('-d', '--day', help="days to run the processors for. "
+        "If no day is given, use the last day with data in the file. "
+        "Only single day processors will be executed if this option is used.",
+        action="append")
     arg_parser.add_argument('-l', '--listprocessors', help="list all available"
         " processors.", action='store_true')
+    
     args = arg_parser.parse_args()
 
     if args.listprocessors:
         print 'optional processors:'
         print '\n'.join('- %s' % k for k in PROCESSORS.keys())
         return
+    days_to_execute = args.day
     
     new_processors = []
     if args.processor:
         new_processors.extend(PROCESSORS[p] for p in args.processor
                               if p in PROCESSORS)
-    
+   
     processors = [spreadsheet_printer, current_worked_time_printer,
                   per_activity_printer, scrum_printer]
     processors.extend(new_processors)
+
     scrum_parser = ScrumParser('')
-    for processor in processors:
+    if days_to_execute:
+        processors = [p for p in processors if not getattr(p, 'multiple_days_processor', False)]
         days = scrum_parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
-        if getattr(processor, 'multiple_days_processor', False):
-            processor(days)
-        else:
-            _, projects_work = days.next()
-            processor(projects_work)
+        projects_work_for_days = get_matching_projects_work(days_to_execute, days)
+        for projects_work in projects_work_for_days:
+            for processor in processors:
+                processor(projects_work)
+    else:
+        for processor in processors:
+            days = scrum_parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
+            if getattr(processor, 'multiple_days_processor', False):
+                processor(days)
+            else:
+                _, projects_work = days.next()
+                processor(projects_work)
+
+def get_matching_projects_work(days_to_execute, days):
+    days_to_execute = set(days_to_execute)
+    result = []
+    for day, projects_work in days:
+        if day.strftime('%d/%m/%Y') in days_to_execute:
+            result.append(projects_work)
+    return list(reversed(result))
 
 def spreadsheet_printer(projects_work):
     full_data = all('work_time_partial' not in pw for pw in projects_work)

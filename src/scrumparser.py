@@ -125,7 +125,11 @@ class PlyScrumParser(object):
 
     def parse(self, input_string):
         input_string = input_string.strip() + '\n'
-        result = self.yacc.parse(input_string, lexer=self.lexer)
+        try:
+            result = self.yacc.parse(input_string, lexer=self.lexer)
+        except:
+            print input_string
+            raise
         self._current_project = self.default_project
         self._times_groups = {}
         self._current_time_group = 1
@@ -287,6 +291,7 @@ class PlyScrumParser(object):
     
     def p_error(self, error):
         print error
+        raise Exception(str(error))
 
 class ScrumParser(object):
     def __init__(self, default_project):
