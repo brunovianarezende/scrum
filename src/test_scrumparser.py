@@ -419,7 +419,7 @@ NA (Not Available) - testing everything
 NA (Not Available) - testing everything
 """
         expected = None
-        test_with_eol(parser_input, expected)
+        self.assertRaises(Exception, test_with_eol, parser_input)
 
         parser_input = """
 23/07/2013
