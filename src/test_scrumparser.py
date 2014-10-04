@@ -24,8 +24,6 @@ Project: new Project name
             ('TIME', '2:31'),
             ('NA', 'NA'),
             ('TASKIDENTIFIER', '#12345'),
-#             ('NUMBERSIGN', '#'),
-#             ('NUMBER', '12345'),
             ('LPARENTHESIS', '('),
             ('TITLE', 'a nice 123 word'),
             ('RPARENTHESIS', ')'),
@@ -485,7 +483,7 @@ Project: New Project Name
 13:05 14:05
 #1234 (First) - First activity
 NA (Second) - Second activity
-#3 (Third) - Third activity
+#third (Third) - Third activity
 """
 
         parser = ScrumParser('')
@@ -614,7 +612,7 @@ NA (Second) - Second activity
                  },
                 {
                  'description': 'Third activity',
-                 'ticket': '3',
+                 'ticket': 'third',
                  'title': 'Third'
                  },
             ],
