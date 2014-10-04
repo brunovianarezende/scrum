@@ -2,7 +2,7 @@ import argparse
 import datetime
 
 from scrumparser import ScrumParser
-from processors import PROCESSORS
+from processors import PROCESSORS, multiple_days_processor
 
 def main():
     arg_parser = argparse.ArgumentParser()
@@ -28,27 +28,29 @@ def main():
     scrum_parser = ScrumParser('')
     for processor in processors:
         days = scrum_parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
-        processor(days)
+        if getattr(processor, 'multiple_days_processor', False):
+            processor(days)
+        else:
+            _, projects_work = days.next()
+            processor(projects_work)
 
-def spreadsheet_printer(days):
-    _, projects_work = days.next()
+def spreadsheet_printer(projects_work):
     full_data = all('work_time_partial' not in pw for pw in projects_work)
     if full_data:
         print_for_spread_sheet(projects_work)
         print ''
 
-def current_worked_time_printer(days):
-    _, projects_work = days.next()
+def current_worked_time_printer(projects_work):
     full_data = all('work_time_partial' not in pw for pw in projects_work)
     if not full_data:
         print_current_worked_time(projects_work)
         print ''
 
-def per_activity_printer(days):
-    _, projects_work = days.next()
+def per_activity_printer(projects_work):
     print_time_per_activity(projects_work)
     print ''
 
+@multiple_days_processor
 def scrum_printer(days):
     day, projects_work = days.next()
     today = datetime.datetime.now().date()

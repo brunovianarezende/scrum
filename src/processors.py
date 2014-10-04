@@ -16,9 +16,12 @@ def register_processor(name):
         return func
     return inner
 
+def multiple_days_processor(func):
+    func.multiple_days_processor = True
+    return func
+
 @register_processor('main_spreadsheet')
-def update_main_spreadsheet(days):
-    _, projects_work = days.next()
+def update_main_spreadsheet(projects_work):
     full_data = all('work_time_partial' not in pw for pw in projects_work)
     if not full_data:
         return
@@ -36,8 +39,7 @@ def update_main_spreadsheet(days):
         update_cells_from_row(ws, row_to_update + i, new_row)
 
 @register_processor('soulmates')
-def update_soulmates_spreadsheet(days):
-    _, projects_work = days.next()
+def update_soulmates_spreadsheet(projects_work):
     full_data = all('work_time_partial' not in pw for pw in projects_work)
     if not full_data:
         return

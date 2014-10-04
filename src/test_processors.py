@@ -94,35 +94,3 @@ class TestFunctions(unittest.TestCase):
                    ]
         self.assertEqual(processors.rows_for_soulmates_spreadsheet(projects_works),
             expected)
-
-
-#     def test_update_photobox_spreadsheet(self):
-#         settings.PHOTOBOX_SPREADSHEET_KEY = TEST_WORKSHEET
-#         gc = gspread.login(settings.GOOGLE_DRIVE_USER, settings.GOOGLE_DRIVE_PWD)
-#         sh = gc.open_by_key(TEST_WORKSHEET)
-#         ws = sh.add_worksheet(title="Bruno", rows="10", cols="7")
-#         try:
-#             projects_works = [
-#                 {'project': 'AnyProject', 'day': '19/06/2014'},
-#             ]
-#             days = iter([('19/06/2014', projects_works)])
-#             processors.update_photobox_spreadsheet(days)
-#     
-#             projects_works = [
-#                 {'project': 'AnyProject', 'day': '19/06/2014'},
-#                 {'project': 'Photobox', 'day': '19/06/2014', 'work_time': 243,
-#                  'activities': [
-#                     {'description': 'a description',
-#                      'ticket': 'ticket',
-#                      'title': 'title',
-#                      },
-#                     {'description': 'another description',
-#                      'ticket': 'another ticket',
-#                      'title': 'another title',
-#                      },
-#                  ]}
-#             ]
-#             days = iter([('19/06/2014', projects_works)])
-#         finally:
-#             sh.del_worksheet(ws)
-#         
