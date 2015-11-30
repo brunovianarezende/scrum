@@ -1,5 +1,6 @@
 import argparse
 import datetime
+import re
 
 from scrumparser import ScrumParser
 from processors import PROCESSORS, multiple_days_processor
@@ -50,10 +51,17 @@ def main():
                 processor(projects_work)
 
 def get_matching_projects_work(days_to_execute, days):
+    def _match(day):
+        day_str = day.strftime('%d/%m/%Y')
+        for dte in days_to_execute:
+            if re.match(dte, day_str):
+                return True
+        return False
     days_to_execute = set(days_to_execute)
     result = []
     for day, projects_work in days:
-        if day.strftime('%d/%m/%Y') in days_to_execute:
+#         if day.strftime('%d/%m/%Y') in days_to_execute:
+        if _match(day):
             result.append(projects_work)
     return list(reversed(result))
 
