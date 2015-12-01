@@ -24,14 +24,12 @@ def main():
         return
     days_to_execute = args.day
     
-    new_processors = []
     if args.processor:
-        new_processors.extend(PROCESSORS[p] for p in args.processor
-                              if p in PROCESSORS)
-   
-    processors = [spreadsheet_printer, current_worked_time_printer,
+        processors = [PROCESSORS[p] for p in args.processor
+                              if p in PROCESSORS]
+    else:
+        processors = [spreadsheet_printer, current_worked_time_printer,
                   per_activity_printer, scrum_printer]
-    processors.extend(new_processors)
 
     scrum_parser = ScrumParser('')
     if days_to_execute:

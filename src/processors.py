@@ -1,7 +1,7 @@
 import datetime
 import decimal
 from itertools import groupby
-
+from collections import defaultdict
 import urllib
 import requests
 
@@ -76,6 +76,27 @@ def rows_for_main_spreadsheet(projects_work):
         day, project = pw['day'], pw['project']
         rows.append((day, project, ids, titles, worked_time, descriptions))
     return rows
+
+@multiple_days_processor
+@register_processor("month")
+def month_report(days):
+    today = datetime.datetime.now().date()
+    current_month = today.month
+#    current_month = 11
+    projects = defaultdict(decimal.Decimal)
+    for day, projects_work in days:
+        if day.month < current_month:
+            break
+        elif day.month > current_month:
+            continue
+#         print day, projects_work
+        for pw in projects_work:
+            if 'work_time' not in pw:
+                continue
+            projects[pw['project']] += decimal.Decimal(format_minutes_as_hours(pw['work_time']))
+    for item in projects.iteritems():
+        print '%s - %s' % item
+    print 'total - %s' % sum(tuple(v for v in projects.itervalues()))
 
 def format_activities(activities):
     """
