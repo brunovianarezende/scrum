@@ -113,6 +113,7 @@ def print_current_worked_time(projects_work):
     print 'worked time: ', format_minutes(total)
 
 def print_time_per_activity(projects_work):
+    total_global = 0
     print 'time spent per activity group:'
     for pw in projects_work:
         if 'time_groups' in pw:
@@ -134,12 +135,15 @@ def print_time_per_activity(projects_work):
             time_data['time'] = time_groups[time_group]
             time_data.setdefault('activities', []).append(activity)
         for _, time_data in sorted(data.iteritems()):
+            total_global += time_data['time']
             print format_minutes(time_data['time'])
             for a in time_data['activities']:
                 ticket = a['ticket']
                 if ticket.isdigit():
                     ticket = '#' + ticket
                 print '%s (%s) - %s' % (ticket, a['title'], a['description'])
+    print 'total time at the day: %s' % format_minutes(total_global)
+    print 'missing time: %s' % format_minutes(8*60 - total_global)
 
 def print_for_spread_sheet(projects_work):
     for pw in projects_work:
@@ -203,10 +207,17 @@ def format_minutes(minutes):
     '1:57'
     >>> format_minutes(3)
     '0:03'
+    >>> format_minutes(-3)
+    '-0:03'
     """
-    hours_str = str(minutes / 60)
-    minutes_str = str(minutes % 60).rjust(2, '0')
-    return ':'.join((hours_str, minutes_str))
+    a_minutes = abs(minutes)
+    hours_str = str(a_minutes / 60)
+    minutes_str = str(a_minutes % 60).rjust(2, '0')
+    result = ':'.join((hours_str, minutes_str))
+    if minutes < 0:
+        return '-' + result
+    else:
+        return result
 
 if __name__ == '__main__':
     main()
