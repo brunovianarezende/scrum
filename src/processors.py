@@ -32,17 +32,10 @@ def update_timezone(projects_work):
                 entry = timezone_entry(pw)
                 project_data = settings.MAPPINGS[project_id]
                 url = create_add_timesheet_url(project_data, entry)
-                # print url
                 requests.get(url, auth=(settings.TIMEZONE_USER, settings.TIMEZONE_PWD))
                 print '%s - created entry for day %s' % (project_id, pw['day'])
             
-#     response = requests.get("https://timezone.thisiszone.com:444/Api/GetTimesheets?date=2015-11-17", auth=(settings.TIMEZONE_USER, settings.TIMEZONE_PWD))
-#     import pdb; pdb.set_trace()
-#     print response
-
 def create_add_timesheet_url(project_data, entry):
-    #    "https://timezone.thisiszone.com:444/Api/AddTimesheet?projectId=1591&roleId=81&hours=1.5&date=2015-11-17&description=test"
-
     all_data = {}
     for d in (project_data, entry):
         for key, value in d.iteritems():
@@ -84,11 +77,13 @@ def month_report(days):
     current_month = today.month
 #    current_month = 11
     projects = defaultdict(decimal.Decimal)
+    num_days = 0
     for day, projects_work in days:
         if day.month < current_month:
             break
         elif day.month > current_month:
             continue
+        num_days += 1
 #         print day, projects_work
         for pw in projects_work:
             if 'work_time' not in pw:
@@ -97,6 +92,7 @@ def month_report(days):
     for item in projects.iteritems():
         print '%s - %s' % item
     print 'total - %s' % sum(tuple(v for v in projects.itervalues()))
+    print 'num days - %s (%s hours)' % (num_days, num_days * 8)
 
 def format_activities(activities):
     """
