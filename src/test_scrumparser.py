@@ -56,7 +56,7 @@ class TestParser(unittest.TestCase):
 26/07/2013
 7:17 9:14
 10:00 12:06
-#4133 (Make Mariupol site and agent work together) - doing
+#4133 (Make SomeProject site and agent work together) - doing
 #1 (new test) - doing too
 NA (Not Available) - testing everything
 """
@@ -66,7 +66,7 @@ NA (Not Available) - testing everything
                 {
                  'description': 'doing',
                  'ticket': '4133',
-                 'title': 'Make Mariupol site and agent work together'
+                 'title': 'Make SomeProject site and agent work together'
                  },
                 {
                  'description': 'doing too',
@@ -99,7 +99,7 @@ DefaultProject: my Nice project
 26/07/2013
 7:17 9:14
 10:00 12:06
-#4133 (Make Mariupol site and agent work together) - doing
+#4133 (Make SomeProject site and agent work together) - doing
 #1 (new test) - doing too
 NA (Not Available) - testing everything
 Project: New Project Name
@@ -114,7 +114,7 @@ NA (Second) - Second activity
                 {
                  'description': 'doing',
                  'ticket': '4133',
-                 'title': 'Make Mariupol site and agent work together'
+                 'title': 'Make SomeProject site and agent work together'
                  },
                 {
                  'description': 'doing too',
@@ -159,7 +159,7 @@ NA (Second) - Second activity
         parser_input = """
 26/07/2013
 7:17
-#4133 (Make Mariupol site and agent work together) - doing
+#4133 (Make SomeProject site and agent work together) - doing
 #1 (new test) - doing too
 NA (Not Available) - testing everything
 """
@@ -169,7 +169,7 @@ NA (Not Available) - testing everything
                 {
                  'description': 'doing',
                  'ticket': '4133',
-                 'title': 'Make Mariupol site and agent work together'
+                 'title': 'Make SomeProject site and agent work together'
                  },
                 {
                  'description': 'doing too',
@@ -193,7 +193,7 @@ NA (Not Available) - testing everything
 26/07/2013
 7:17 9:17
 9:18
-#4133 (Make Mariupol site and agent work together) - doing
+#4133 (Make SomeProject site and agent work together) - doing
 #1 (new test) - doing too
 NA (Not Available) - testing everything
 """
@@ -203,7 +203,7 @@ NA (Not Available) - testing everything
                 {
                  'description': 'doing',
                  'ticket': '4133',
-                 'title': 'Make Mariupol site and agent work together'
+                 'title': 'Make SomeProject site and agent work together'
                  },
                 {
                  'description': 'doing too',
@@ -227,7 +227,7 @@ NA (Not Available) - testing everything
 23/07/2013
 7:17 8:17
 8:20 9:20
-#4133 (Make Mariupol site and agent work together) - doing
+#4133 (Make SomeProject site and agent work together) - doing
 13:25 14:26
 #1 (new test) - doing too
 NA (Not Available) - testing everything
@@ -242,7 +242,7 @@ Project: Other Project
                 {
                  'description': 'doing',
                  'ticket': '4133',
-                 'title': 'Make Mariupol site and agent work together',
+                 'title': 'Make SomeProject site and agent work together',
                  },
                 {
                  'description': 'doing too',
@@ -289,7 +289,7 @@ Project: Other Project
 23/07/2013
 7:17 8:17
 13:25 
-#4133 (Make Mariupol site and agent work together) - doing
+#4133 (Make SomeProject site and agent work together) - doing
 8:20 9:20
 #1 (new test) - doing too
 NA (Not Available) - testing everything
@@ -300,7 +300,7 @@ NA (Not Available) - testing everything
                 {
                  'description': 'doing',
                  'ticket': '4133',
-                 'title': 'Make Mariupol site and agent work together',
+                 'title': 'Make SomeProject site and agent work together',
                  },
                 {
                  'description': 'doing too',
@@ -330,7 +330,7 @@ NA (Not Available) - testing everything
 23/07/2013
 7:17 8:17
 13:25 14:25
-#4133 (Make Mariupol site and agent work together) - doing
+#4133 (Make SomeProject site and agent work together) - doing
 8:20
 #1 (new test) - doing too
 NA (Not Available) - testing everything
@@ -341,7 +341,7 @@ NA (Not Available) - testing everything
                 {
                  'description': 'doing',
                  'ticket': '4133',
-                 'title': 'Make Mariupol site and agent work together',
+                 'title': 'Make SomeProject site and agent work together',
                  },
                 {
                  'description': 'doing too',
@@ -370,7 +370,7 @@ NA (Not Available) - testing everything
         parser_input = """
 23/07/2013
 7:17 8:17
-#4133 (Make Mariupol site and agent work together) - doing
+#4133 (Make SomeProject site and agent work together) - doing
 8:20
 #1 (new test) - doing too
 13:25 14:25
@@ -382,7 +382,7 @@ NA (Not Available) - testing everything
                 {
                  'description': 'doing',
                  'ticket': '4133',
-                 'title': 'Make Mariupol site and agent work together',
+                 'title': 'Make SomeProject site and agent work together',
                  },
                 {
                  'description': 'doing too',
@@ -412,7 +412,7 @@ NA (Not Available) - testing everything
         parser_input = """
 23/07/2013
 7:17 8:17
-#4133 (Make Mariupol site and agent work together) - doing
+#4133 (Make SomeProject site and agent work together) - doing
 8:20
 #1 (new test) - doing too
 13:25
@@ -450,7 +450,7 @@ DefaultProject: Project
 26/07/2013
 7:17 9:14
 10:00 12:06
-#4133 (Make Mariupol site and agent work together) - doing
+#4133 (Make SomeProject site and agent work together) - doing
 #1 (new test) - doing too
 NA (Not Available) - testing everything
 Project: New Project Name
@@ -474,7 +474,7 @@ DefaultProject: other project
 23/07/2013
 7:17 9:17
 10:00 11:00
-#4133 (Make Mariupol site and agent work together) - doing
+#4133 (Make SomeProject site and agent work together) - doing
 11:00 11:15
 #1 (new test) - doing too
 11:15 12:00
@@ -494,7 +494,7 @@ NA (Second) - Second activity
                 {
                  'description': 'doing',
                  'ticket': '4133',
-                 'title': 'Make Mariupol site and agent work together'
+                 'title': 'Make SomeProject site and agent work together'
                  },
                 {
                  'description': 'doing too',
@@ -574,7 +574,7 @@ NA (Second) - Second activity
                 {
                  'description': 'doing',
                  'ticket': '4133',
-                 'title': 'Make Mariupol site and agent work together'
+                 'title': 'Make SomeProject site and agent work together'
                  },
                 {
                  'description': 'doing too',

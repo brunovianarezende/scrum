@@ -189,14 +189,14 @@ def print_for_scrum(today, scrum_data, today_scrum_data):
 def format_activities(activities):
     """
     >>> format_activities([
-    ...     ('4133', 'Make Mariupol site and agent work together', 'doing'),
+    ...     ('4133', 'Make SomeProject site and agent work together', 'doing'),
     ... ])
-    ('4133', 'Make Mariupol site and agent work together', 'doing')
+    ('4133', 'Make SomeProject site and agent work together', 'doing')
     >>> format_activities([
-    ...     ('4133', 'Make Mariupol site and agent work together', 'doing'),
+    ...     ('4133', 'Make SomeProject site and agent work together', 'doing'),
     ...     ('NA', 'Other title', 'other description'),
     ... ])
-    ('4133 / NA', 'Make Mariupol site and agent work together / Other title', 'doing / other description')
+    ('4133 / NA', 'Make SomeProject site and agent work together / Other title', 'doing / other description')
     """
     grouped = zip(*activities)
     return tuple(' / '.join(i) for i in grouped)
