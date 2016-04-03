@@ -78,7 +78,22 @@ def scrum_printer(days):
             scrum_data.append((day, projects_work))
             if day.weekday() not in (5, 6):
                 break
-    print_for_scrum(today, scrum_data, today_scrum_data)
+    all_projects = set()
+    otherdays = {}
+    for day, projects_work in  scrum_data:
+        for pw in projects_work:
+            otherdays.setdefault(pw['project'], []).append((day, [pw]))
+            all_projects.add(pw['project'])
+    today_entries = {}
+    if today_scrum_data:
+        day, projects_work = today_scrum_data
+        for pw in projects_work:
+            today_entries[pw['project']] = (day, [pw])
+            all_projects.add(pw['project'])
+    print 'data for scrum:'
+    for project in sorted(all_projects):
+        print project
+        print_for_scrum(today, reversed(otherdays.get(project, [])), today_entries.get(project))
 
 DAYS = dict(enumerate(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']))
 
@@ -130,7 +145,6 @@ def print_time_per_activity(projects_work):
     print 'missing time: %s' % format_minutes(8*60 - total_global)
 
 def print_for_scrum(today, scrum_data, today_scrum_data):
-    print 'data for scrum:'
     for scrum_day, projects_work in scrum_data:
         if scrum_day.weekday() in (5, 6):
             scrum_day = DAYS[scrum_day.weekday()]
@@ -158,4 +172,4 @@ def print_for_scrum(today, scrum_data, today_scrum_data):
     
     print ''
     print '[obstacles]'
-    print '#None'
+    print '#None\n'
