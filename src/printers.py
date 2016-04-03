@@ -1,12 +1,11 @@
 import datetime
 
-from utils import format_activities, format_minutes, get_matching_projects_work
+from utils import format_minutes, get_matching_projects_work
 from commands import scrum_command
 from scrumparser import ScrumParser
 
 def _printers():
     return [
-        ('spreadsheet', spreadsheet_printer),
         ('current', current_worked_time_printer),
         ('per_activity', per_activity_printer),
         ('scrum', scrum_printer),
@@ -54,12 +53,6 @@ def printer_subcommand(args):
             else:
                 _, projects_work = days.next()
                 printer(projects_work)
-
-def spreadsheet_printer(projects_work):
-    full_data = all('work_time_partial' not in pw for pw in projects_work)
-    if full_data:
-        print_for_spread_sheet(projects_work)
-        print ''
 
 def current_worked_time_printer(projects_work):
     full_data = all('work_time_partial' not in pw for pw in projects_work)
@@ -135,16 +128,6 @@ def print_time_per_activity(projects_work):
                 print '%s (%s) - %s' % (ticket, a['title'], a['description'])
     print 'total time at the day: %s' % format_minutes(total_global)
     print 'missing time: %s' % format_minutes(8*60 - total_global)
-
-def print_for_spread_sheet(projects_work):
-    for pw in projects_work:
-        ids, titles, descriptions = format_activities([
-            (a['ticket'], a['title'], a['description'])
-            for a in pw['activities']
-        ])
-        worked_time = format_minutes(pw['work_time'])
-        day, project = pw['day'], pw['project']
-        print '\t'.join((day, project, ids, titles, worked_time, descriptions))
 
 def print_for_scrum(today, scrum_data, today_scrum_data):
     print 'data for scrum:'
