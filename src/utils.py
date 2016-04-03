@@ -36,10 +36,14 @@ def format_minutes(minutes):
     '1:57'
     >>> format_minutes(3)
     '0:03'
+    >>> format_minutes(-3)
+    '-0:03'
     """
+    sign = '' if minutes >= 0 else '-'
+    minutes = abs(minutes)
     hours_str = str(minutes / 60)
     minutes_str = str(minutes % 60).rjust(2, '0')
-    return ':'.join((hours_str, minutes_str))
+    return sign + ':'.join((hours_str, minutes_str))
 
 def format_minutes_as_hours(minutes):
     """
@@ -51,6 +55,8 @@ def format_minutes_as_hours(minutes):
     True
     >>> all(format_minutes_as_hours(t) == '4.75'for t in (285, 278, 292))
     True
+    >>> [format_minutes_as_hours(-t) for t in (45, 38, 52)]
+    ['-0.75', '-0.75', '-0.75']
     """
     base = minutes / 60
     mod = minutes % 60
