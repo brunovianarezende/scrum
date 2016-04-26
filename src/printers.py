@@ -97,6 +97,13 @@ def print_current_worked_time(projects_work):
     print 'worked time: ', format_minutes(total)
 
 def print_time_per_activity(projects_work):
+    def _worked_time_til_now(worked, pending):
+        now = datetime.datetime.now()
+        normalized = now.hour * 60 + now.minute
+        total = worked
+        hour, minute = (int(p) for p in pending.split(':'))
+        total += normalized - (hour*60 + minute)
+        return total
     total_global = 0
     print 'time spent per activity group:'
     for pw in projects_work:
@@ -105,12 +112,8 @@ def print_time_per_activity(projects_work):
         else:
             total = 0
             if 'work_time' not in pw:
-                now = datetime.datetime.now()
-                normalized = now.hour * 60 + now.minute
                 worked, pending = pw['work_time_partial']
-                total = worked
-                hour, minute = (int(p) for p in pending.split(':'))
-                total += normalized - (hour*60 + minute)
+                total += _worked_time_til_now(worked, pending)
             time_groups = {1: pw.get('work_time', total)}
         data = {}
         for activity in pw['activities']:
@@ -119,8 +122,14 @@ def print_time_per_activity(projects_work):
             time_data['time'] = time_groups[time_group]
             time_data.setdefault('activities', []).append(activity)
         for _, time_data in sorted(data.iteritems()):
-            total_global += time_data['time']
-            print format_minutes(time_data['time'])
+            try:
+                total_global += time_data['time']
+                print format_minutes(time_data['time'])
+            except:
+                worked, pending = time_data['time']
+                activity_time = _worked_time_til_now(worked, pending)
+                total_global += activity_time
+                print format_minutes(activity_time)
             for a in time_data['activities']:
                 ticket = a['ticket']
                 if ticket.isdigit():
