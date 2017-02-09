@@ -2,11 +2,15 @@ import argparse
 import sys
 
 from commands import COMMANDS
+import settings
 import month as _
 import timezone as _
 import printers as _
 
 def main():
+    if settings.SCRUM_FILEPATH is None:
+        print 'Attention: SCRUM_FILEPATH must have a value configured in local_settings.py file'
+        return
     arg_parser = argparse.ArgumentParser()
     
     sub_parsers = arg_parser.add_subparsers()
@@ -28,6 +32,8 @@ def set_default_subparser(self, name, args=None):
 
     , tested with 2.7, 3.2, 3.3, 3.4
     it works with 2.6 assuming argparse is installed
+
+    COPIED FROM http://stackoverflow.com/a/26379693/1922026
     """
     subparser_found = False
     for arg in sys.argv[1:]:

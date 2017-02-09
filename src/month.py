@@ -2,6 +2,7 @@ import datetime
 import decimal
 from collections import defaultdict
 
+import settings
 from utils import format_minutes_as_hours
 from commands import scrum_command
 from scrumparser import ScrumParser
@@ -12,22 +13,19 @@ def month_subcommand_config(sub_parser):
 
 def month_subcommand(args):
     scrum_parser = ScrumParser('')
-    days = scrum_parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
+    days = scrum_parser.parse(open(settings.SCRUM_FILEPATH).readlines())
     month_report(days)
 
 def month_report(days):
-    today = datetime.datetime.now().date()
-    current_month = today.month
-#    current_month = 11
+    today = datetime.date.today()
     projects = defaultdict(decimal.Decimal)
     num_days = 0
     for day, projects_work in days:
-        if day.month < current_month:
+        if (day.year, day.month) < (today.year, today.month):
             break
-        elif day.month > current_month:
+        elif (day.year, day.month) > (today.year, today.month):
             continue
         num_days += 1
-#         print day, projects_work
         for pw in projects_work:
             if 'work_time' not in pw:
                 continue

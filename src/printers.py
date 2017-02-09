@@ -1,5 +1,6 @@
 import datetime
 
+import settings
 from utils import format_minutes, get_matching_projects_work
 from commands import scrum_command
 from scrumparser import ScrumParser
@@ -40,14 +41,14 @@ def printer_subcommand(args):
 
     if days_to_execute:
         valid_printers = [p for p in printers if p != scrum_printer]
-        days = scrum_parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
+        days = scrum_parser.parse(open(settings.SCRUM_FILEPATH).readlines())
         projects_work_for_days = get_matching_projects_work(days_to_execute, days)
         for projects_work in projects_work_for_days:
             for printer in valid_printers:
                 printer(projects_work)
     else:
         for printer in printers:
-            days = scrum_parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
+            days = scrum_parser.parse(open(settings.SCRUM_FILEPATH).readlines())
             if scrum_printer == printer:
                 printer(days)
             else:
@@ -66,7 +67,7 @@ def per_activity_printer(projects_work):
 
 def scrum_printer(days):
     day, projects_work = days.next()
-    today = datetime.datetime.now().date()
+    today = datetime.date.today()
     if today == day:
         today_scrum_data = (day, projects_work)
         day, projects_work = days.next()
