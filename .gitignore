@@ -1,3 +1,6 @@
+scrum/parser.out
+scrum/parsetab.py
+*egg-info
 *.pyc
 local_settings.py
 .project

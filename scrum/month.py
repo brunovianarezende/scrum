@@ -2,10 +2,10 @@ import datetime
 import decimal
 from collections import defaultdict
 
-import settings
-from utils import format_minutes_as_hours
-from commands import scrum_command
-from scrumparser import ScrumParser
+from . import settings
+from .utils import format_minutes_as_hours
+from .commands import scrum_command
+from .scrumparser import ScrumParser
 
 @scrum_command("month")
 def month_subcommand_config(sub_parser):
@@ -30,7 +30,7 @@ def month_report(days):
             if 'work_time' not in pw:
                 continue
             projects[pw['project']] += decimal.Decimal(format_minutes_as_hours(pw['work_time']))
-    for item in projects.iteritems():
-        print '%s - %s' % item
-    print 'total - %s' % sum(tuple(v for v in projects.itervalues()))
-    print 'num days - %s (%s hours)' % (num_days, num_days * 8)
+    for item in projects.items():
+        print('%s - %s' % item)
+    print('total - %s' % sum(tuple(v for v in projects.values())))
+    print('num days - %s (%s hours)' % (num_days, num_days * 8))

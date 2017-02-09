@@ -1,9 +1,9 @@
 import datetime
 
-import settings
-from utils import format_minutes, get_matching_projects_work
-from commands import scrum_command
-from scrumparser import ScrumParser
+from . import settings
+from .utils import format_minutes, get_matching_projects_work
+from .commands import scrum_command
+from .scrumparser import ScrumParser
 
 def _printers():
     return [
@@ -33,7 +33,7 @@ def printer_subcommand(args):
         for printer_id in args.printer:
             printer = printers_dict.get(printer_id)
             if not printer:
-                print "'%s' doesn't exist" % printer_id
+                print("'%s' doesn't exist" % printer_id)
             else:
                 printers.append(printer)
 
@@ -52,25 +52,25 @@ def printer_subcommand(args):
             if scrum_printer == printer:
                 printer(days)
             else:
-                _, projects_work = days.next()
+                _, projects_work = next(days)
                 printer(projects_work)
 
 def current_worked_time_printer(projects_work):
     full_data = all('work_time_partial' not in pw for pw in projects_work)
     if not full_data:
         print_current_worked_time(projects_work)
-        print ''
+        print('')
 
 def per_activity_printer(projects_work):
     print_time_per_activity(projects_work)
-    print ''
+    print('')
 
 def scrum_printer(days):
-    day, projects_work = days.next()
+    day, projects_work = next(days)
     today = datetime.date.today()
     if today == day:
         today_scrum_data = (day, projects_work)
-        day, projects_work = days.next()
+        day, projects_work = next(days)
     else:
         today_scrum_data = None
     scrum_data = [(day, projects_work)]
@@ -95,7 +95,7 @@ def print_current_worked_time(projects_work):
             total += worked
             hour, minute = (int(p) for p in pending.split(':'))
             total += normalized - (hour*60 + minute)
-    print 'worked time: ', format_minutes(total)
+    print('worked time: ', format_minutes(total))
 
 def print_time_per_activity(projects_work):
     def _worked_time_til_now(worked, pending):
@@ -106,7 +106,7 @@ def print_time_per_activity(projects_work):
         total += normalized - (hour*60 + minute)
         return total
     total_global = 0
-    print 'time spent per activity group:'
+    print('time spent per activity group:')
     for pw in projects_work:
         if 'time_groups' in pw:
             time_groups = pw['time_groups']
@@ -122,25 +122,25 @@ def print_time_per_activity(projects_work):
             time_data = data.setdefault(time_group, {})
             time_data['time'] = time_groups[time_group]
             time_data.setdefault('activities', []).append(activity)
-        for _, time_data in sorted(data.iteritems()):
+        for _, time_data in sorted(data.items()):
             try:
                 total_global += time_data['time']
-                print format_minutes(time_data['time'])
+                print(format_minutes(time_data['time']))
             except:
                 worked, pending = time_data['time']
                 activity_time = _worked_time_til_now(worked, pending)
                 total_global += activity_time
-                print format_minutes(activity_time)
+                print(format_minutes(activity_time))
             for a in time_data['activities']:
                 ticket = a['ticket']
                 if ticket.isdigit():
                     ticket = '#' + ticket
-                print '%s (%s) - %s' % (ticket, a['title'], a['description'])
-    print 'total time at the day: %s' % format_minutes(total_global)
-    print 'missing time: %s' % format_minutes(8*60 - total_global)
+                print('%s (%s) - %s' % (ticket, a['title'], a['description']))
+    print('total time at the day: %s' % format_minutes(total_global))
+    print('missing time: %s' % format_minutes(8*60 - total_global))
 
 def print_for_scrum(today, scrum_data, today_scrum_data):
-    print 'data for scrum:'
+    print('data for scrum:')
     for scrum_day, projects_work in scrum_data:
         if scrum_day.weekday() in (5, 6):
             scrum_day = DAYS[scrum_day.weekday()]
@@ -148,15 +148,15 @@ def print_for_scrum(today, scrum_data, today_scrum_data):
             scrum_day = 'yesterday'
         else:
             scrum_day = DAYS[scrum_day.weekday()]
-        print '[%s]' % scrum_day
+        print('[%s]' % scrum_day)
         for project_work in projects_work:
             for a in project_work['activities']:
                 ticket = a['ticket']
                 if ticket.isdigit():
                     ticket = '#' + ticket
-                print '%s (%s) - %s' % (ticket, a['title'], a['description'])
-    print ''
-    print '[today]'
+                print('%s (%s) - %s' % (ticket, a['title'], a['description']))
+    print('')
+    print('[today]')
     if today_scrum_data:
         _, projects_work = today_scrum_data
         for project_work in projects_work:
@@ -164,8 +164,8 @@ def print_for_scrum(today, scrum_data, today_scrum_data):
                 ticket = a['ticket']
                 if ticket.isdigit():
                     ticket = '#' + ticket
-                print '%s (%s) - %s' % (ticket, a['title'], a['description'])
+                print('%s (%s) - %s' % (ticket, a['title'], a['description']))
     
-    print ''
-    print '[obstacles]'
-    print '#None'
+    print('')
+    print('[obstacles]')
+    print('#None')

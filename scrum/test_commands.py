@@ -1,6 +1,6 @@
 import unittest
 
-import commands
+from . import commands
 
 class TestFunctions(unittest.TestCase):
     def test_scrum_command(self):

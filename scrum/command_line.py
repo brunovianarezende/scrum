@@ -1,18 +1,33 @@
+import os
 import argparse
 import sys
+import configparser
+import importlib
 
-from commands import COMMANDS
-import settings
-import month as _
-import timezone as _
-import printers as _
+def get_config_extensions():
+    scrum_rc_path = os.path.expanduser("~/.scrumrc")
+    if os.path.exists(scrum_rc_path):
+        config = configparser.ConfigParser()
+        config.read(scrum_rc_path)
+        if 'extensions' in config:
+            return list(config['extensions'])
+
+
+default_extensions = ['scrum.month', 'scrum.printers']
+extensions = default_extensions + get_config_extensions()
+
+for extension in extensions:
+    importlib.__import__(extension)
+
+from scrum import settings
+from scrum.commands import COMMANDS
 
 def main():
     if settings.SCRUM_FILEPATH is None:
-        print 'Attention: SCRUM_FILEPATH must have a value configured in local_settings.py file'
+        print('Attention: SCRUM_FILEPATH must have a value configured in local_settings.py file')
         return
     arg_parser = argparse.ArgumentParser()
-    
+
     sub_parsers = arg_parser.add_subparsers()
     for _, command_setup_func in sorted(COMMANDS.items()):
         sub_parser = sub_parsers.add_parser(command_setup_func.command_name, **command_setup_func.sub_parser_args)

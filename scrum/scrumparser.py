@@ -74,23 +74,23 @@ class ScrumLexer(object):
         return t
 
     def t_error(self, t):
-        print "initial: Illegal character '%s'" % t.value[0]
+        print("initial: Illegal character '%s'" % t.value[0])
         t.lexer.skip(1)
 
     def t_taskdescription_error(self, t):
-        print "taskdescription: Illegal character '%s'" % t.value[0]
+        print("taskdescription: Illegal character '%s'" % t.value[0])
         t.lexer.skip(1)
 
     def t_activity_error(self, t):
-        print "activity: Illegal character '%s'" % t.value[0]
+        print("activity: Illegal character '%s'" % t.value[0])
         t.lexer.skip(1)
 
     def t_defaultproject_error(self, t):
-        print "defaultproject: Illegal character '%s'" % t.value[0]
+        print("defaultproject: Illegal character '%s'" % t.value[0])
         t.lexer.skip(1)
 
     def t_project_error(self, t):
-        print "project: Illegal character '%s'" % t.value[0]
+        print("project: Illegal character '%s'" % t.value[0])
         t.lexer.skip(1)
 
     def build(self,**kwargs):
@@ -128,7 +128,7 @@ class PlyScrumParser(object):
         try:
             result = self.yacc.parse(input_string, lexer=self.lexer)
         except:
-            print input_string
+            print(input_string)
             raise
         self._current_project = self.default_project
         self._times_groups = {}
@@ -290,7 +290,7 @@ class PlyScrumParser(object):
         p[0] = p[1]
     
     def p_error(self, error):
-        print error
+        print(error)
         raise Exception(str(error))
 
 class ScrumParser(object):

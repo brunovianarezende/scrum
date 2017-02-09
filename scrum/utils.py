@@ -41,7 +41,7 @@ def format_minutes(minutes):
     """
     sign = '' if minutes >= 0 else '-'
     minutes = abs(minutes)
-    hours_str = str(minutes / 60)
+    hours_str = str(minutes // 60)
     minutes_str = str(minutes % 60).rjust(2, '0')
     return sign + ':'.join((hours_str, minutes_str))
 
@@ -58,7 +58,7 @@ def format_minutes_as_hours(minutes):
     >>> [format_minutes_as_hours(-t) for t in (45, 38, 52)]
     ['-0.75', '-0.75', '-0.75']
     """
-    base = minutes / 60
+    base = minutes // 60
     mod = minutes % 60
     candidates = (0, 15, 30, 45, 60)
     distances = tuple(abs(mod - c) for c in candidates)

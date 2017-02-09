@@ -1,9 +1,9 @@
 import unittest
 import datetime
 
-import scrumparser
+from . import scrumparser
 scrumparser.DEV_MODE = True
-from scrumparser import ScrumLexer, PlyScrumParser, ScrumParser
+from .scrumparser import ScrumLexer, PlyScrumParser, ScrumParser
 
 class TestScrumLexer(unittest.TestCase):
     def test_tokenizer(self):
@@ -534,7 +534,7 @@ NA (Second) - Second activity
             'project': 'New Project Name',
             },
         ])
-        self.assertEqual(items.next(), expected)
+        self.assertEqual(next(items), expected)
 
         expected = (datetime.date(2013, 7, 25), [
             {
@@ -550,7 +550,7 @@ NA (Second) - Second activity
             'project': 'Project',
             },
         ])
-        self.assertEqual(items.next(), expected)
+        self.assertEqual(next(items), expected)
 
         expected = (datetime.date(2013, 7, 24), [
             {
@@ -566,7 +566,7 @@ NA (Second) - Second activity
             'project': 'other project',
             },
         ])
-        self.assertEqual(items.next(), expected)
+        self.assertEqual(next(items), expected)
 
         expected = (datetime.date(2013, 7, 23), [
             {
@@ -621,6 +621,6 @@ NA (Second) - Second activity
             'project': 'New Project Name',
             },
         ])
-        self.assertEqual(items.next(), expected)
+        self.assertEqual(next(items), expected)
 
-        self.assertRaises(StopIteration, items.next)
+        self.assertRaises(StopIteration, next, items)

@@ -1,7 +1,7 @@
 import unittest
 
-import timezone
-import settings
+from . import timezone
+from . import settings
 
 class TestFunctions(unittest.TestCase):
     def setUp(self):
