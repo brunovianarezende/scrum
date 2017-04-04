@@ -11,6 +11,7 @@ def get_config_extensions():
         config.read(scrum_rc_path)
         if 'extensions' in config:
             return list(config['extensions'])
+    return []
 
 
 default_extensions = ['scrum.month', 'scrum.printers']
