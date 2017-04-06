@@ -22,7 +22,7 @@ def timezone_subcommand(args):
 
 def _projects_works(days_to_execute):
     scrum_parser = ScrumParser('')
-    days = scrum_parser.parse(open('/home/brunore/Desktop/cs_data.txt').readlines())
+    days = scrum_parser.parse(open(settings.SCRUM_FILEPATH).readlines())
 
     if days_to_execute:
         return get_matching_projects_work(days_to_execute, days)
