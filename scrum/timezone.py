@@ -40,8 +40,14 @@ def update_timezone(projects_work):
                 entry = timezone_entry(pw)
                 project_data = settings.MAPPINGS[project_id]
                 url = create_add_timesheet_url(project_data, entry)
-                requests.get(url, auth=(settings.TIMEZONE_USER, settings.TIMEZONE_PWD))
-                print('%s - created entry for day %s' % (project_id, pw['day']))
+                response = requests.get(url, auth=(settings.TIMEZONE_USER, settings.TIMEZONE_PWD))
+                if response.status_code == 200:
+                    print('%s - created entry for day %s' % (project_id, pw['day']))
+                else:
+                    print('%s - error for day %s: %s' % (project_id, pw['day'], response.status_code))
+                    errors = response.json()
+                    for error in errors:
+                        print('%s - %s' % (error['Key'], error['Value']))
 
 def timezone_entry(pw):
     result = {}
