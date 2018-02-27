@@ -70,15 +70,22 @@ def scrum_printer(days):
     today = datetime.date.today()
     if today == day:
         today_scrum_data = (day, projects_work)
-        day, projects_work = next(days)
+        try:
+            day, projects_work = next(days)
+        except StopIteration:
+            day, projects_work = (None, [])
     else:
         today_scrum_data = None
-    scrum_data = [(day, projects_work)]
-    if day.weekday() in (5, 6):
-        for day, projects_work in days:
-            scrum_data.append((day, projects_work))
-            if day.weekday() not in (5, 6):
-                break
+    if day is None:
+        scrum_data = []
+    else:
+        scrum_data = [(day, projects_work)]
+        if day.weekday() in (5, 6):
+            for day, projects_work in days:
+                scrum_data.append((day, projects_work))
+                if day.weekday() not in (5, 6):
+                    break
+
     print_for_scrum(today, scrum_data, today_scrum_data)
 
 DAYS = dict(enumerate(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']))
