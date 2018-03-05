@@ -4,15 +4,22 @@ import sys
 import configparser
 import importlib
 
-def get_config_extensions():
+def get_config():
     scrum_rc_path = os.path.expanduser("~/.scrumrc")
     if os.path.exists(scrum_rc_path):
         config = configparser.ConfigParser()
         config.read(scrum_rc_path)
+        return config
+    else:
+        return None
+
+def get_config_extensions():
+    config = get_config()
+    if config is not None:
         if 'extensions' in config:
             return list(config['extensions'])
-    return []
-
+    else:
+        return []
 
 default_extensions = ['scrum.month', 'scrum.printers']
 extensions = default_extensions + get_config_extensions()
