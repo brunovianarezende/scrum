@@ -2,6 +2,7 @@ import unittest
 import datetime
 
 from . import scrumparser
+
 scrumparser.DEV_MODE = True
 from .scrumparser import ScrumLexer, PlyScrumParser, ScrumParser
 
@@ -43,6 +44,7 @@ Project: new Project name
             self.assertEqual(tokens[i].value, value, msg)
         self.assertEqual(len(tokens), len(expected), '%s - %s' % (expected, tokens))
 
+
 class TestParser(unittest.TestCase):
     def test_parse(self):
         def test_with_eol(parser_input, expected, parser=None):
@@ -80,6 +82,7 @@ NA (Not Available) - testing everything
                  },
             ],
             'day': '26/07/2013',
+            'intervals': [('7:17', '9:14'), ('10:00', '12:06')],
             'work_time': 243,
             'project': 'Project',
             }
@@ -129,6 +132,7 @@ NA (Second) - Second activity
             ],
             'day': '26/07/2013',
             'work_time': 243,
+            'intervals': [('7:17', '9:14'), ('10:00', '12:06')],
             'project': 'Project',
             },
             {
@@ -151,6 +155,7 @@ NA (Second) - Second activity
             ],
             'day': '26/07/2013',
             'work_time': 51,
+            'intervals': [('1:14', '2:05')],
             'project': 'New Project Name',
             },
         ]
@@ -258,11 +263,27 @@ Project: Other Project
                  },
             ],
             'time_groups': {
-                1: 120,
-                2: 61,
+                1: {
+                    'minutes': 120,
+                    'intervals': [
+                        ('7:17', '8:17'),
+                        ('8:20', '9:20'),
+                    ]
+                },
+                2: {
+                    'minutes': 61,
+                    'intervals': [
+                        ('13:25', '14:26')
+                    ]
+                }
             },
             'day': '23/07/2013',
             'work_time': 181,
+            'intervals': [
+                ('7:17', '8:17'),
+                ('8:20', '9:20'),
+                ('13:25', '14:26')
+            ],
             'project': 'Project',
             },
             {
@@ -280,6 +301,7 @@ Project: Other Project
             ],
             'day': '23/07/2013',
             'work_time': 120,
+            'intervals': [('7:17', '9:17')],
             'project': 'Other Project',
             }
         ]
@@ -317,7 +339,7 @@ NA (Not Available) - testing everything
             ],
             'time_groups': {
                 1: (60, '13:25'),
-                2: 60,
+                2: {'minutes': 60, 'intervals': [('8:20', '9:20')]} 
             },
             'day': '23/07/2013',
             'work_time_partial': (120, '13:25'),
@@ -357,7 +379,7 @@ NA (Not Available) - testing everything
                  },
             ],
             'time_groups': {
-                1: 120,
+                1: {'minutes': 120, 'intervals': [('7:17', '8:17'), ('13:25', '14:25')]},
                 2: (0, '8:20'),
             },
             'day': '23/07/2013',
@@ -398,9 +420,9 @@ NA (Not Available) - testing everything
                  },
             ],
             'time_groups': {
-                1: 60,
+                1: {'intervals': [('7:17', '8:17')], 'minutes': 60},
                 2: (0, '8:20'),
-                3: 60,
+                3: {'intervals': [('13:25', '14:25')], 'minutes': 60}
             },
             'day': '23/07/2013',
             'work_time_partial': (120, '8:20'),
@@ -436,6 +458,7 @@ NA (Not Available) - testing everything
                  }
             ],
             'day': '23/07/2013',
+            'intervals': [('7:17', '8:17')],
             'work_time': 60,
             'project': 'Project',
             },
@@ -507,6 +530,7 @@ NA (Second) - Second activity
                  'title': 'Not Available'
                  },
             ],
+            'intervals': [('7:17', '9:14'), ('10:00', '12:06')],
             'day': '26/07/2013',
             'work_time': 243,
             'project': 'Project',
@@ -529,6 +553,7 @@ NA (Second) - Second activity
                  'title': 'Third'
                  },
             ],
+            'intervals': [('1:14', '2:05')],
             'day': '26/07/2013',
             'work_time': 51,
             'project': 'New Project Name',
@@ -545,6 +570,7 @@ NA (Second) - Second activity
                  'title': 'title'
                  },
             ],
+            'intervals': [('7:17', '9:14'), ('10:00', '12:06')],
             'day': '25/07/2013',
             'work_time': 243,
             'project': 'Project',
@@ -561,6 +587,7 @@ NA (Second) - Second activity
                  'title': 'other title'
                  },
             ],
+            'intervals': [('7:17', '9:14'), ('10:00', '12:06')],
             'day': '24/07/2013',
             'work_time': 243,
             'project': 'other project',
@@ -589,11 +616,14 @@ NA (Second) - Second activity
                  'time_group': 3,
                  },
             ],
-            'time_groups': {
-                1: 180,
-                2: 15,
-                3: 45,
-            },
+            'intervals': [('7:17', '9:17'),
+                 ('10:00', '11:00'),
+                 ('11:00', '11:15'),
+                 ('11:15', '12:00')],
+            'time_groups': {1: {'intervals': [('7:17', '9:17'), ('10:00', '11:00')],
+                       'minutes': 180},
+                   2: {'intervals': [('11:00', '11:15')], 'minutes': 15},
+                   3: {'intervals': [('11:15', '12:00')], 'minutes': 45}},
             'day': '23/07/2013',
             'work_time': 240,
             'project': 'other project',
@@ -617,6 +647,7 @@ NA (Second) - Second activity
                  },
             ],
             'day': '23/07/2013',
+            'intervals': [('13:05', '14:05')],
             'work_time': 60,
             'project': 'New Project Name',
             },

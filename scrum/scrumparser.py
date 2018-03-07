@@ -141,7 +141,6 @@ class PlyScrumParser(object):
         p[0] = p[1]
 
     def p_dayinfo(self, p):
-#         'dayinfo : DAY EOL intervals EOL activities'
         'dayinfo : DAY EOL projectsdata'
         result = [dict(d) for d in p[3]]
         for d in result:
@@ -184,6 +183,7 @@ class PlyScrumParser(object):
         'activitiesdatamult : activitiesdatamult activitiesdata'
         merged = dict(p[1])
         merged['work_time'] += p[2]['work_time']
+        merged['intervals'] = p[1]['intervals'] + p[2]['intervals']
         merged['activities'].extend(p[2]['activities'])
         p[0] = merged
 
@@ -195,7 +195,11 @@ class PlyScrumParser(object):
         'activitiesdata : intervals activities'
         self._times_groups[self._current_time_group] = p[1]
         self._current_time_group += 1
-        p[0] = {'work_time': p[1], 'activities': p[2],}
+        p[0] = {
+            'work_time': p[1]['minutes'],
+            'intervals': p[1]['intervals'],
+            'activities': p[2],
+        }
 
     def p_partialactivitiesdatamult_multiple1(self, p):
         'partialactivitiesdatamult : activitiesdatamult partialactivitiesdata'
@@ -241,19 +245,28 @@ class PlyScrumParser(object):
 
     def p_intervals_multiple(self, p):
         'intervals : intervals interval'
-        p[0] = p[1] + p[2]
+        p[0] = {
+            'minutes': p[1]['minutes'] + p[2]['minutes'],
+            'intervals': p[1]['intervals'] + [p[2]['interval']]
+        }
 
     def p_intervals_single(self, p):
         'intervals : interval'
-        p[0] = p[1]
+        p[0] = {
+            'minutes': p[1]['minutes'],
+            'intervals': [p[1]['interval']]
+        }
 
     def p_interval(self, p):
         'interval : TIME TIME EOL'
-        p[0] = convert_to_minutes(p[2]) - convert_to_minutes(p[1])
+        p[0] = {
+            'minutes': convert_to_minutes(p[2]) - convert_to_minutes(p[1]),
+            'interval': (p[1], p[2])
+        }
 
     def p_partialintervals_multiple(self, p):
         'partialintervals : intervals semiinterval'
-        p[0] = (p[1], p[2])
+        p[0] = (p[1]['minutes'], p[2])
 
     def p_partialintervals_single(self, p):
         'partialintervals : semiinterval'
