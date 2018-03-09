@@ -30,18 +30,20 @@ def format_activities(activities):
     grouped = zip(*activities)
     return tuple(' / '.join(i) for i in grouped)
 
-def format_minutes(minutes):
+def format_minutes(minutes, pad_hours=False):
     """
     >>> format_minutes(117)
     '1:57'
     >>> format_minutes(3)
     '0:03'
+    >>> format_minutes(3, True)
+    '00:03'
     >>> format_minutes(-3)
     '-0:03'
     """
     sign = '' if minutes >= 0 else '-'
     minutes = abs(minutes)
-    hours_str = str(minutes // 60)
+    hours_str = str(minutes // 60).rjust(2 if pad_hours else 1, '0')
     minutes_str = str(minutes % 60).rjust(2, '0')
     return sign + ':'.join((hours_str, minutes_str))
 
