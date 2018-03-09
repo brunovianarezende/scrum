@@ -127,7 +127,9 @@ def print_time_per_activity(projects_work):
         for activity in pw['activities']:
             time_group = activity.get('time_group', 1)
             time_data = data.setdefault(time_group, {})
-            time_data['time'] = time_groups[time_group]
+            # ugly hack, need to improve data model of the whole app...
+            the_time_group = time_groups[time_group]
+            time_data['time'] = the_time_group[0] if type(the_time_group) is tuple else the_time_group['minutes']
             time_data.setdefault('activities', []).append(activity)
         for _, time_data in sorted(data.items()):
             try:
