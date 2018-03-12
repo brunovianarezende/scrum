@@ -129,7 +129,13 @@ def print_time_per_activity(projects_work):
             time_data = data.setdefault(time_group, {})
             # ugly hack, need to improve data model of the whole app...
             the_time_group = time_groups[time_group]
-            time_data['time'] = the_time_group[0] if type(the_time_group) is tuple else the_time_group['minutes']
+            # ARGH
+            if type(the_time_group) is int:
+                time_data['time'] = the_time_group
+            elif type(the_time_group) is tuple:
+                time_data['time'] = the_time_group[0]
+            else:
+                time_data['time'] = the_time_group['minutes']
             time_data.setdefault('activities', []).append(activity)
         for _, time_data in sorted(data.items()):
             try:
