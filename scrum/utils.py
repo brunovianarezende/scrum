@@ -47,7 +47,7 @@ def format_minutes(minutes, pad_hours=False):
     minutes_str = str(minutes % 60).rjust(2, '0')
     return sign + ':'.join((hours_str, minutes_str))
 
-def format_minutes_as_hours(minutes):
+def format_minutes_as_hours(minutes, round_to=15):
     """
     >>> all(format_minutes_as_hours(t) == '2'for t in (117, 123))
     True
@@ -62,7 +62,7 @@ def format_minutes_as_hours(minutes):
     """
     base = minutes // 60
     mod = minutes % 60
-    candidates = (0, 15, 30, 45, 60)
+    candidates = tuple(range(0, 61, round_to))
     distances = tuple(abs(mod - c) for c in candidates)
     index_min = distances.index(min(distances))
     match = candidates[index_min]

@@ -4,6 +4,7 @@ from collections import defaultdict
 
 from . import settings
 from .utils import format_minutes_as_hours
+from .command_line import get_config
 from .commands import scrum_command
 from .scrumparser import ScrumParser
 
@@ -14,9 +15,12 @@ def month_subcommand_config(sub_parser):
 def month_subcommand(args):
     scrum_parser = ScrumParser('')
     days = scrum_parser.parse(open(settings.SCRUM_FILEPATH).readlines())
-    month_report(days)
+    config = get_config()
+    month_report(days, config)
 
-def month_report(days):
+def month_report(days, config):
+    month_config = config['month']
+    round_to = int(month_config.get('round_to', 15))
     today = datetime.date.today()
     projects = defaultdict(decimal.Decimal)
     num_days = 0
@@ -29,7 +33,7 @@ def month_report(days):
         for pw in projects_work:
             if 'work_time' not in pw:
                 continue
-            projects[pw['project']] += decimal.Decimal(format_minutes_as_hours(pw['work_time']))
+            projects[pw['project']] += decimal.Decimal(format_minutes_as_hours(pw['work_time'], round_to=round_to))
     for item in projects.items():
         print('%s - %s' % item)
     print('total - %s' % sum(tuple(v for v in projects.values())))
