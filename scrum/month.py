@@ -10,24 +10,28 @@ from .scrumparser import ScrumParser
 
 @scrum_command("month")
 def month_subcommand_config(sub_parser):
+    sub_parser.add_argument('-m', '--month', default=None, type=int)
+    sub_parser.add_argument('-y', '--year', default=None, type=int)
     return month_subcommand
 
 def month_subcommand(args):
+    today = datetime.date.today()
+    month = today.month if args.month is None else args.month
+    year = today.year if args.year is None else args.year
     scrum_parser = ScrumParser('')
     days = scrum_parser.parse(open(settings.SCRUM_FILEPATH).readlines())
     config = get_config()
-    month_report(days, config)
+    month_report(month, year, days, config)
 
-def month_report(days, config):
+def month_report(month, year, days, config):
     month_config = config['month']
     round_to = int(month_config.get('round_to', 15))
-    today = datetime.date.today()
     projects = defaultdict(decimal.Decimal)
     num_days = 0
     for day, projects_work in days:
-        if (day.year, day.month) < (today.year, today.month):
+        if (day.year, day.month) < (year, month):
             break
-        elif (day.year, day.month) > (today.year, today.month):
+        elif (day.year, day.month) > (year, month):
             continue
         num_days += 1
         for pw in projects_work:
