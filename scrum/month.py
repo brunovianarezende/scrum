@@ -33,12 +33,15 @@ def month_report(month, year, days, config):
             break
         elif (day.year, day.month) > (year, month):
             continue
-        num_days += 1
+        worked_in_the_day = False
         for pw in projects_work:
-            if 'work_time' not in pw:
+            if 'work_time' not in pw or pw['work_time'] == 0:
                 continue
+            worked_in_the_day = True
             projects[pw['project']] += decimal.Decimal(format_minutes_as_hours(pw['work_time'], round_to=round_to))
+        if worked_in_the_day:
+            num_days += 1
     for item in projects.items():
         print('%s - %s' % item)
     print('total - %s' % sum(tuple(v for v in projects.values())))
-    print('num days - %s (%s hours)' % (num_days, num_days * 8))
+    print('num days - %s (expected %s hours, 4 hours per day)' % (num_days, num_days * 4))
