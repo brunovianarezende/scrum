@@ -8,6 +8,6 @@ How to run:
 * install the dependencies:
     * `pip install -r requirements.txt`
     * `pip install -e .`
-* create a scrum/local_settings.py file with pointing to the default file with the timings
+* create a scrum/local_settings.py file pointing to the default file with the timings
 * execute the scrum command: `scrum` or `scrum -h`
 * To execute the tests, just execute: 'nosetests --with-doctest'
