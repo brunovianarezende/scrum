@@ -1,5 +1,6 @@
 import unittest
 import datetime
+import tempfile
 
 from . import scrumparser
 
@@ -45,12 +46,12 @@ Project: new Project name
         self.assertEqual(len(tokens), len(expected), '%s - %s' % (expected, tokens))
 
 
-class TestParser(unittest.TestCase):
+class TestPlyScrumParser(unittest.TestCase):
     def test_parse(self):
         def test_with_eol(parser_input, expected, parser=None):
             if parser is None:
                 parser = PlyScrumParser(default_project='Project')
-            for p in parser_input.strip(), parser_input.strip() + '\n':
+            for p in (parser_input.strip(), parser_input.strip() + '\n'):
                 result = parser.parse(p)
                 self.assertEqual(result, expected)
 
@@ -655,3 +656,32 @@ NA (Second) - Second activity
         self.assertEqual(next(items), expected)
 
         self.assertRaises(StopIteration, next, items)
+
+    def test_parse_data_coming_from_a_file(self):
+        parser_input = """\
+26/07/2013
+07:17 09:14
+10:00 12:06
+#4133 (Make SomeProject site and agent work together) - doing
+"""
+        with tempfile.TemporaryFile(mode='w+') as f:
+            f.write(parser_input)
+            parser = ScrumParser('Project')
+            f.seek(0)
+            items = parser.parse(f.readlines())
+            expected = (datetime.date(2013, 7, 26), [
+                {
+                'activities': [
+                    {
+                    'description': 'doing',
+                    'ticket': '4133',
+                    'title': 'Make SomeProject site and agent work together'
+                    },
+                ],
+                'intervals': [('07:17', '09:14'), ('10:00', '12:06')],
+                'day': '26/07/2013',
+                'work_time': 243,
+                'project': 'Project',
+                },
+            ])
+            self.assertEqual(next(items), expected)

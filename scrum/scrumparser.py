@@ -316,12 +316,20 @@ class ScrumParser(object):
             line = line.strip()
             if line:
                 current_lines.append(line)
-            elif not current_lines:
-                pass
             else:
-                item_str = '\n'.join(current_lines)
-                current_lines = []
-                result = self.parser.parse(item_str)
-                if result:
-                    day = datetime.datetime.strptime(result[0]['day'], '%d/%m/%Y').date()
-                    yield day, result
+                if current_lines:
+                    result = self._process_group_of_lines(current_lines)
+                    if result is not None:
+                        yield result
+                    current_lines = []
+        if current_lines:
+            result = self._process_group_of_lines(current_lines)
+            if result is not None:
+                yield result
+
+    def _process_group_of_lines(self, group_of_lines):
+        item_str = '\n'.join(group_of_lines)
+        result = self.parser.parse(item_str)
+        if result:
+            day = datetime.datetime.strptime(result[0]['day'], '%d/%m/%Y').date()
+            return (day, result)
