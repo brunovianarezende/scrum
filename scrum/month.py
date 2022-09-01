@@ -2,9 +2,8 @@ import datetime
 import decimal
 from collections import defaultdict
 
-from . import settings
 from .utils import format_minutes_as_hours
-from .command_line import get_config
+from .command_line import get_config, get_scrum_file_content
 from .commands import scrum_command
 from .scrumparser import ScrumParser
 
@@ -19,7 +18,7 @@ def month_subcommand(args):
     month = today.month if args.month is None else args.month
     year = today.year if args.year is None else args.year
     scrum_parser = ScrumParser('')
-    days = scrum_parser.parse(open(settings.SCRUM_FILEPATH).readlines())
+    days = scrum_parser.parse(get_scrum_file_content())
     config = get_config()
     month_report(month, year, days, config)
 

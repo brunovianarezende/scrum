@@ -21,6 +21,10 @@ def get_config_extensions():
     else:
         return []
 
+def get_scrum_file_content():
+    with open(settings.SCRUM_FILEPATH, encoding='UTF-8') as f:
+        return f.readlines()
+
 default_extensions = ['scrum.month', 'scrum.printers']
 extensions = default_extensions + get_config_extensions()
 
