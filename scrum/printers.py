@@ -2,7 +2,7 @@ import datetime
 
 from .utils import format_minutes, get_matching_projects_work
 from .commands import scrum_command
-from .command_line import get_scrum_file_content
+from .command_line import get_scrum_file_content, get_config
 from .scrumparser import ScrumParser
 
 def _printers():
@@ -37,6 +37,7 @@ def printer_subcommand(args):
             else:
                 printers.append(printer)
 
+    config = get_config()
     scrum_parser = ScrumParser('')
 
     if days_to_execute:
@@ -45,27 +46,28 @@ def printer_subcommand(args):
         projects_work_for_days = get_matching_projects_work(days_to_execute, days)
         for projects_work in projects_work_for_days:
             for printer in valid_printers:
-                printer(projects_work)
+                printer(projects_work, config)
     else:
         for printer in printers:
             days = scrum_parser.parse(get_scrum_file_content())
             if scrum_printer == printer:
-                printer(days)
+                printer(days, config)
             else:
                 _, projects_work = next(days)
-                printer(projects_work)
+                printer(projects_work, config)
 
-def current_worked_time_printer(projects_work):
+def current_worked_time_printer(projects_work, config):
     full_data = all('work_time_partial' not in pw for pw in projects_work)
     if not full_data:
         print_current_worked_time(projects_work)
         print('')
 
-def per_activity_printer(projects_work):
-    print_time_per_activity(projects_work)
+def per_activity_printer(projects_work, config):
+    num_hours_per_day = int(config.get('printers', 'num_hours_per_day', fallback=8))
+    print_time_per_activity(projects_work, num_hours_per_day)
     print('')
 
-def scrum_printer(days):
+def scrum_printer(days, config):
     day, projects_work = next(days)
     today = datetime.date.today()
     if today == day:
@@ -104,7 +106,7 @@ def print_current_worked_time(projects_work):
             total += normalized - (hour*60 + minute)
     print('worked time: ', format_minutes(total))
 
-def print_time_per_activity(projects_work):
+def print_time_per_activity(projects_work, num_hours_per_day):
     def _worked_time_til_now(worked, pending):
         now = datetime.datetime.now()
         normalized = now.hour * 60 + now.minute
@@ -152,7 +154,7 @@ def print_time_per_activity(projects_work):
                     ticket = '#' + ticket
                 print('%s (%s) - %s' % (ticket, a['title'], a['description']))
     print('total time at the day: %s' % format_minutes(total_global))
-    print('missing time: %s' % format_minutes(8*60 - total_global))
+    print('missing time: %s' % format_minutes(num_hours_per_day*60 - total_global))
 
 def print_for_scrum(today, scrum_data, today_scrum_data):
     print('data for scrum:')

@@ -23,8 +23,7 @@ def month_subcommand(args):
     month_report(month, year, days, config)
 
 def month_report(month, year, days, config):
-    month_config = config['month']
-    round_to = int(month_config.get('round_to', 15))
+    round_to = int(config.get('month', 'round_to', fallback= 15))
     projects = defaultdict(decimal.Decimal)
     num_days = 0
     for day, projects_work in days:
