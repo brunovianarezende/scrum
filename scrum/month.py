@@ -1,8 +1,10 @@
 import datetime
 import decimal
-from collections import defaultdict
 
-from .utils import format_minutes_as_hours
+from collections import defaultdict
+from functools import reduce
+
+from .utils import format_minutes_as_hours, format_minutes
 from .command_line import get_config, get_scrum_file_content
 from .commands import scrum_command
 from .scrumparser import ScrumParser
@@ -23,8 +25,10 @@ def month_subcommand(args):
     month_report(month, year, days, config)
 
 def month_report(month, year, days, config):
-    round_to = int(config.get('month', 'round_to', fallback= 15))
-    projects = defaultdict(decimal.Decimal)
+    round_to = int(config.get('month', 'round_to', fallback=15))
+    num_hours_per_day = int(config.get('common', 'num_hours_per_day', fallback=8))
+
+    projects = defaultdict(lambda : (0, decimal.Decimal()))
     num_days = 0
     for day, projects_work in days:
         if (day.year, day.month) < (year, month):
@@ -36,10 +40,17 @@ def month_report(month, year, days, config):
             if 'work_time' not in pw or pw['work_time'] == 0:
                 continue
             worked_in_the_day = True
-            projects[pw['project']] += decimal.Decimal(format_minutes_as_hours(pw['work_time'], round_to=round_to))
+            (total, rounded) = projects[pw['project']]
+            total += pw['work_time']
+            rounded += decimal.Decimal(format_minutes_as_hours(pw['work_time'], round_to=round_to))
+            projects[pw['project']] = (total, rounded)
         if worked_in_the_day:
             num_days += 1
+    print(f'Rounded to {round_to} minutes.')
+    format_project_data = lambda project, total, rounded: f'{project} - {rounded} (total: {format_minutes(total, pad_hours=True)})'
     for item in projects.items():
-        print('%s - %s' % item)
-    print('total - %s' % sum(tuple(v for v in projects.values())))
-    print('num days - %s (expected %s hours, 4 hours per day)' % (num_days, num_days * 4))
+        project, (total, rounded) = item
+        print(format_project_data(project, total, rounded))
+    total, rounded = reduce(lambda a, b: tuple(sum(p) for p in zip(a, b)), projects.values(), (0, decimal.Decimal()))
+    print(format_project_data('total', total, rounded))
+    print(f'num days - {num_days} (expected {num_days * num_hours_per_day} hours, {num_hours_per_day} hours per day)')

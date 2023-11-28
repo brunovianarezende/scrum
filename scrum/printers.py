@@ -63,7 +63,7 @@ def current_worked_time_printer(projects_work, config):
         print('')
 
 def per_activity_printer(projects_work, config):
-    num_hours_per_day = int(config.get('printers', 'num_hours_per_day', fallback=8))
+    num_hours_per_day = int(config.get('common', 'num_hours_per_day', fallback=8))
     print_time_per_activity(projects_work, num_hours_per_day)
     print('')
 
